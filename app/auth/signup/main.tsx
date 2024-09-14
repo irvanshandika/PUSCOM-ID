@@ -9,7 +9,6 @@ import { app } from "@/src/config/FirebaseConfig";
 import { GoogleIcon } from "@/src/components/icons/GoogleIcon";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
-import { sign } from "crypto";
 
 const SignUpPage: React.FC = () => {
   const [displayName, setDisplayName] = useState("");
@@ -97,27 +96,28 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-pink-100 to-purple-200">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-gray-100 to-blue-100">
       <div className="p-8 bg-white rounded-lg shadow-xl w-96 max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center text-purple-600">Bergabunglah dengan Kami</h1>
-        <p className="text-center text-gray-600 mb-6">Temukan rahasia kecantikan alami Anda</p>
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Daftar Akun PUSCOM</h1>
+        <p className="text-center text-gray-600 mb-6">Silahkan daftar untuk membeli, menjual, atau memperbaiki perangkat komputer Anda</p>
         <form onSubmit={handleSignUp} className="space-y-4">
-          <Input label="Nama" placeholder="Masukkan nama Anda" value={displayName} onChange={(e) => setDisplayName(e.target.value)} className="rounded-full" />
-          <Input label="Email" placeholder="Masukkan email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="rounded-full" />
-          <Input label="Password" placeholder="Masukkan password Anda" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="rounded-full" />
-          <Button type="submit" color="secondary" className="w-full rounded-full">
+          <Input label="Full Name" placeholder="Masukkan email Anda" type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+          <Input label="Email" placeholder="Masukkan email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input label="Password" placeholder="Masukkan password Anda" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Button type="submit" className="w-full bg-blue-600 text-white rounded-full py-3 font-bold hover:bg-blue-700">
             Daftar Sekarang
           </Button>
         </form>
         <div className="mt-4 text-center">
           <span className="text-gray-500">atau</span>
         </div>
-        <Button onClick={handleGoogleSignUp} className="w-full mt-4 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 rounded-full" startContent={<GoogleIcon className="text-red-500" />}>
-          Daftar dengan Google
+        <Button onClick={handleGoogleSignUp} className="w-full mt-4 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 rounded-full flex justify-center items-center">
+          <GoogleIcon className="text-red-500" />
+          <span className="ml-2">Daftar dengan Google</span>
         </Button>
         <p className="mt-6 text-center text-sm text-gray-600">
           Sudah punya akun?{" "}
-          <Link href="/auth/signin" className="text-purple-600 hover:underline">
+          <Link href="/auth/signin" className="text-blue-600 hover:underline">
             Masuk di sini
           </Link>
         </p>
