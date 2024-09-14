@@ -6,10 +6,12 @@ import DropdownUser from "@/src/servercomponents/UserLogin/DropdownUser";
 import { auth, db } from "@/src/config/FirebaseConfig";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { usePathname } from "next/navigation"; // Import usePathname
 
 function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [isUserExists, setIsUserExists] = useState(false);
+  const pathname = usePathname(); // Initialize usePathname
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -25,6 +27,10 @@ function Navbar() {
 
     return () => unsubscribe();
   }, []);
+
+  // Function to check if the link is active
+  const isActive = (path: string) => pathname === path;
+
   return (
     <>
       <header className="flex fixed z-20 top-0 start-0 flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-3 bg-transparent backdrop-blur-3xl">
@@ -84,17 +90,17 @@ function Navbar() {
           </div>
           <div id="hs-navbar-alignment" className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:grow-0 sm:basis-auto sm:block sm:order-2" aria-labelledby="hs-navbar-alignment-collapse">
             <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:mt-0 sm:ps-5">
-              <Link className="font-medium text-blue-500 focus:outline-none" href="#" aria-current="page">
-                Landing
+              <Link href="/" className={`font-medium focus:outline-none ${isActive("/") ? "text-blue-500" : "text-gray-200 hover:text-gray-400"}`}>
+                Home
               </Link>
-              <Link className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500" href="#">
-                Account
+              <Link href="/jual-beli" className={`font-medium focus:outline-none ${isActive("/jual-beli") ? "text-blue-500" : "text-gray-200 hover:text-gray-400"}`}>
+                Jual Beli
               </Link>
-              <Link className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500" href="#">
-                Work
+              <Link href="/spare-part" className={`font-medium focus:outline-none ${isActive("/spare-part") ? "text-blue-500" : "text-gray-200 hover:text-gray-400"}`}>
+                Spare Part
               </Link>
-              <Link className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500" href="#">
-                Blog
+              <Link href="/servis" className={`font-medium focus:outline-none ${isActive("/servis") ? "text-blue-500" : "text-gray-200 hover:text-gray-400"}`}>
+                Servis
               </Link>
             </div>
           </div>

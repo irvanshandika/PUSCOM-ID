@@ -149,31 +149,31 @@ const SignInPage: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-pink-100 to-purple-200">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600">
       <div className="p-8 bg-white rounded-lg shadow-xl w-96 max-w-md">
-        <h1 className="text-3xl font-bold mb-6 text-center text-purple-600">Selamat Datang Kembali</h1>
-        <p className="text-center text-gray-600 mb-6">Masuk untuk melanjutkan perjalanan kecantikan Anda</p>
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">PUSCOM Login</h1>
+        <p className="text-center text-gray-600 mb-6">Masuk untuk mengakses layanan PUSCOM</p>
         <form onSubmit={handleSignIn} className="space-y-4">
-          <Input label="Email" placeholder="Masukkan email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="rounded-full" />
-          <Input label="Password" placeholder="Masukkan password Anda" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="rounded-full" />
-          <Button type="submit" color="secondary" className="w-full rounded-full">
+          <Input label="Email" placeholder="Masukkan email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="rounded-md" />
+          <Input label="Password" placeholder="Masukkan password Anda" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="rounded-md" />
+          <Button type="submit" color="primary" className="w-full rounded-md">
             Masuk
           </Button>
         </form>
         <div className="mt-4 text-center">
           <span className="text-gray-500">atau</span>
         </div>
-        <Button onClick={handleGoogleSignIn} className="w-full mt-4 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 rounded-full" startContent={<GoogleIcon className="text-red-500" />}>
+        <Button onClick={handleGoogleSignIn} className="w-full mt-4 bg-blue-500 text-white rounded-md" startContent={<GoogleIcon className="text-white" />}>
           Masuk dengan Google
         </Button>
         <p className="mt-6 text-center text-sm text-gray-600">
           Belum punya akun?{" "}
-          <Link href="/auth/signup" className="text-purple-600 hover:underline">
+          <Link href="/auth/signup" className="text-blue-600 hover:underline">
             Daftar di sini
           </Link>
         </p>
         <p className="mt-2 text-center text-sm text-gray-600">
-          <Link href="/forgot-password" className="text-purple-600 hover:underline">
+          <Link href="/forgot-password" className="text-blue-600 hover:underline">
             Lupa password?
           </Link>
         </p>

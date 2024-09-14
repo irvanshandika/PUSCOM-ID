@@ -57,7 +57,7 @@ export default function DropdownProfile() {
           </>
         ),
         {
-          duration: 6000,
+          duration: 4000,
         }
       );
       await signOut(auth);
