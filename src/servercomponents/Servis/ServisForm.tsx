@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Button, Input, Textarea, Select, SelectItem, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
 import { Monitor, Upload } from "lucide-react";
 import { useState } from "react";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "@/src/config/FirebaseConfig"; // Pastikan ini adalah path yang benar untuk FirebaseConfig Anda
 import { toast } from "react-hot-toast";
@@ -41,7 +42,7 @@ export default function ServisForm() {
         imageUrl = await getDownloadURL(storageRef);
       }
 
-      // Save service data to Firestore
+      // Save service data to Firestore with a unique ID
       const serviceData = {
         name,
         email,
@@ -53,9 +54,16 @@ export default function ServisForm() {
         createdAt: new Date(),
       };
 
-      await setDoc(doc(db, "laptop_service_requests", email), serviceData);
+      // Use addDoc to generate a unique ID for each document
+      await addDoc(collection(db, "laptop_service_requests"), serviceData);
 
-      toast.success("Permintaan servis berhasil dikirim!");
+      toast.success("Permintaan servis berhasil dikirim!", {
+        duration: 3000,
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+      window.location.reload();
     } catch (error) {
       console.error("Error submitting service form:", error);
       toast.error("Terjadi kesalahan saat mengirim permintaan servis.");
@@ -124,13 +132,13 @@ export default function ServisForm() {
                 <>
                   <ModalHeader className="flex flex-col gap-1">Verifikasi</ModalHeader>
                   <ModalBody>
-                    <p className="text-sm text-gray-600">Pastikan data yang Anda masukkan sudah benar sebelum mengirim permintaan servis.</p>
+                    <p className="text-sm text-gray-600">Pastikan data dan nomor hp yang Anda masukkan sudah benar sebelum mengirim permintaan servis.</p>
                   </ModalBody>
                   <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
                       Close
                     </Button>
-                    <Button type="submit" color="primary" disabled={loading}>
+                    <Button type="submit" color="primary" disabled={loading} onClick={handleSubmit}>
                       {loading ? "Mengirim..." : "Ya, data saya sudah benar"}
                     </Button>
                   </ModalFooter>
