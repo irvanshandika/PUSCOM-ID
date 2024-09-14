@@ -33,7 +33,7 @@ function Navbar() {
 
   return (
     <>
-      <header className="flex fixed z-20 top-0 start-0 flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-3 bg-transparent backdrop-blur-3xl">
+      <header className="flex fixed z-20 top-0 start-0 flex-wrap sm:justify-start sm:flex-nowrap w-full text-sm py-3 bg-transparent backdrop-blur-lg">
         <nav className="max-w-[85rem] w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-between">
           <Link className="sm:order-1 flex-none text-xl font-semibold dark:text-white focus:outline-none focus:opacity-80" href="/">
             PUSCOM
@@ -90,16 +90,16 @@ function Navbar() {
           </div>
           <div id="hs-navbar-alignment" className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:grow-0 sm:basis-auto sm:block sm:order-2" aria-labelledby="hs-navbar-alignment-collapse">
             <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:mt-0 sm:ps-5">
-              <Link href="/" className={`font-medium focus:outline-none ${isActive("/") ? "text-blue-500" : "text-gray-200 hover:text-gray-400"}`}>
+              <Link href="/" className={`font-medium focus:outline-none ${isActive("/") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
                 Home
               </Link>
-              <Link href="/jual-beli" className={`font-medium focus:outline-none ${isActive("/jual-beli") ? "text-blue-500" : "text-gray-200 hover:text-gray-400"}`}>
+              <Link href="/jual-beli" className={`font-medium focus:outline-none ${isActive("/jual-beli") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
                 Jual Beli
               </Link>
-              <Link href="/spare-part" className={`font-medium focus:outline-none ${isActive("/spare-part") ? "text-blue-500" : "text-gray-200 hover:text-gray-400"}`}>
+              <Link href="/spare-part" className={`font-medium focus:outline-none ${isActive("/spare-part") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
                 Spare Part
               </Link>
-              <Link href="/servis" className={`font-medium focus:outline-none ${isActive("/servis") ? "text-blue-500" : "text-gray-200 hover:text-gray-400"}`}>
+              <Link href="/servis" className={`font-medium focus:outline-none ${isActive("/servis") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
                 Servis
               </Link>
             </div>
