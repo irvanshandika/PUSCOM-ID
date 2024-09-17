@@ -11,9 +11,13 @@ export const metadata: Metadata = {
 function Servis() {
   return (
     <>
-      <Navbar />
-      <ServisPage />
-      <Footer />
+      <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white">
+        <Navbar />
+        <main className="container mx-auto px-4 py-12">
+          <ServisPage />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }

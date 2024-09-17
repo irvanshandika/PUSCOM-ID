@@ -78,7 +78,7 @@ const SignInPage: React.FC = () => {
           </>
         ),
         {
-          duration: 6000,
+          duration: 3000,
         }
       );
       router.push("/");
@@ -138,7 +138,7 @@ const SignInPage: React.FC = () => {
           </>
         ),
         {
-          duration: 6000,
+          duration: 3000,
         }
       );
       router.push("/");

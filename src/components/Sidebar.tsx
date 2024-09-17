@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { getAuth, signOut } from "firebase/auth";
 import { app } from "@/src/config/FirebaseConfig";
+import { Cog } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useRouter, usePathname } from "next/navigation";
 import ExitIcon from "./icons/ExitIcon";
 import UserIcon from "./icons/UserIcon";
+import { Package2 } from "lucide-react";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -34,10 +37,10 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   }, []);
 
   const handleLogout = async () => {
-    try {
-      router.push("/");
-      toast.custom(
-        (t) => (
+    signOut(auth)
+      .then(() => {
+        router.push("/");
+        toast.custom((t) => (
           <>
             <div className="max-w-xs relative bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-800 dark:border-neutral-700" role="alert" aria-labelledby="hs-toast-avatar-label">
               <div className="flex p-4">
@@ -63,15 +66,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               </div>
             </div>
           </>
-        ),
-        {
-          duration: 6000,
-        }
-      );
-      await signOut(auth);
-    } catch (error: any) {
-      console.log("Error signing out: ", error.message);
-    }
+        ));
+      })
+      .catch((error) => {
+        console.error("Error signing out:", error);
+        toast.error(`${error.message}`, { duration: 5000 });
+      });
   };
   return (
     <>
@@ -87,16 +87,6 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             <div className="hidden md:block"></div>
 
             <div className="flex flex-row items-center justify-end gap-1">
-              <button
-                type="button"
-                className="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
-                <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-                  <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-                </svg>
-                <span className="sr-only">Notifications</span>
-              </button>
-
               <button
                 type="button"
                 className="size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700">
@@ -194,7 +184,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 <li>
                   <a
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg focus:outline-none ${
-                      isActive("/dashboard") ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white" : "text-gray-800 dark:text-neutral-400"
+                      isActive("/dashboard") ? "bg-gray-900 text-white hover:bg-gray-500" : "text-gray-800 dark:text-neutral-400"
                     } hover:bg-gray-100 dark:hover:bg-neutral-700`}
                     href="/dashboard">
                     <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -208,31 +198,21 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 <li>
                   <a
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg focus:outline-none ${
-                      isActive("/dashboard/daftar-servis") ? "bg-gray-100 text-gray-800 dark:bg-neutral-700 dark:text-white" : "text-gray-800 dark:text-neutral-400"
+                      isActive("/dashboard/daftar-servis") ? "bg-gray-900 text-white hover:bg-gray-500" : "text-gray-800 dark:text-neutral-400"
                     } hover:bg-gray-100 dark:hover:bg-neutral-700`}
                     href="/dashboard/daftar-servis">
-                    <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-                      <line x1="16" x2="16" y1="2" y2="6" />
-                      <line x1="8" x2="8" y1="2" y2="6" />
-                      <line x1="3" x2="21" y1="10" y2="10" />
-                      <path d="M8 14h.01" />
-                      <path d="M12 14h.01" />
-                      <path d="M16 14h.01" />
-                      <path d="M8 18h.01" />
-                      <path d="M12 18h.01" />
-                      <path d="M16 18h.01" />
-                    </svg>
+                    <Cog className="w-5 h-5" />
                     Daftar Servis
                   </a>
                 </li>
                 <li>
-                  <a className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-900 dark:text-neutral-200 dark:hover:text-neutral-300" href="#">
-                    <svg className="shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                    </svg>
-                    Documentation
+                  <a
+                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg focus:outline-none ${
+                      isActive("/dashboard/products") ? "bg-gray-900 text-white hover:bg-gray-500" : "text-gray-800 dark:text-neutral-400"
+                    } hover:bg-gray-100 dark:hover:bg-neutral-700`}
+                    href="/dashboard/products">
+                    <Package2 className="w-5 h-5" />
+                    Produk
                   </a>
                 </li>
               </ul>

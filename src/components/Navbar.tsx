@@ -93,14 +93,11 @@ function Navbar() {
               <Link href="/" className={`font-medium focus:outline-none ${isActive("/") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
                 Home
               </Link>
-              <Link href="/jual-beli" className={`font-medium focus:outline-none ${isActive("/jual-beli") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
-                Jual Beli
+              <Link href="/catalog" className={`font-medium focus:outline-none ${isActive("/catalog") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
+                Catalog
               </Link>
-              <Link href="/spare-part" className={`font-medium focus:outline-none ${isActive("/spare-part") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
-                Spare Part
-              </Link>
-              <Link href="/servis" className={`font-medium focus:outline-none ${isActive("/servis") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
-                Servis
+              <Link href="/service" className={`font-medium focus:outline-none ${isActive("/service") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
+                Service
               </Link>
             </div>
           </div>

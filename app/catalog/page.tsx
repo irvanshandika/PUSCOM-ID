@@ -1,21 +1,20 @@
 import React from "react";
+import ProductCatalog from "./main";
 import Navbar from "@/src/components/Navbar";
-import Hero from "@/src/sections/Hero";
-import Services from "@/src/sections/Services";
-import Testimonials from "@/src/sections/Testimonials";
-import Contact from "@/src/sections/Contact";
 import Footer from "@/src/components/Footer";
+import type { Metadata } from "next";
 
-function Home() {
+export const metadata: Metadata = {
+  title: "Catalog",
+};
+
+function Catalog() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white">
         <Navbar />
         <main className="container mx-auto px-4 py-12">
-          <Hero />
-          <Services />
-          <Testimonials />
-          <Contact />
+          <ProductCatalog />
         </main>
         <Footer />
       </div>
@@ -23,4 +22,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Catalog;

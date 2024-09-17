@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { Button, Input, Textarea, Select, SelectItem, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
+import { Button, Input, Textarea, Select, SelectItem, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, RadioGroup, Radio } from "@nextui-org/react";
 import { Monitor, Upload } from "lucide-react";
 import { useState } from "react";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
@@ -16,6 +16,7 @@ export default function ServisForm() {
   const [phone, setPhone] = useState("");
   const [brand, setBrand] = useState("");
   const [type, setType] = useState("");
+  const [jenisLaptop, setJenisLaptop] = useState("");
   const [damage, setDamage] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,8 @@ export default function ServisForm() {
         brand,
         type,
         damage,
+        jenisLaptop,
+        status: "pending",
         imageUrl, // Save the image URL to Firestore
         createdAt: new Date(),
       };
@@ -73,7 +76,7 @@ export default function ServisForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 pt-[10vh] pb-[10vh]">
+    <div className="min-h-screen flex items-center justify-center px-4 pt-[4vh] pb-[10vh]">
       <div className="max-w-2xl w-full space-y-8 bg-white p-6 rounded-xl shadow-lg">
         <div className="text-center">
           <div className="flex justify-center">
@@ -108,6 +111,10 @@ export default function ServisForm() {
               </SelectItem>
             </Select>
             <Input type="text" placeholder="Masukkan tipe laptop Anda" variant="bordered" labelPlacement="outside" fullWidth value={type} onChange={(e) => setType(e.target.value)} required />
+            <RadioGroup label="Jenis Perangkat" value={jenisLaptop} onChange={(e) => setJenisLaptop(e.target.value)} isRequired>
+              <Radio value="komputer">Komputer</Radio>
+              <Radio value="laptop">Laptop</Radio>
+            </RadioGroup>
             <Textarea placeholder="Jelaskan kerusakan yang dialami laptop Anda" variant="bordered" labelPlacement="outside" minRows={3} value={damage} onChange={(e) => setDamage(e.target.value)} required />
             <div>
               <label htmlFor="laptop-image" className="block text-sm font-medium text-gray-700 mb-2">
@@ -119,7 +126,7 @@ export default function ServisForm() {
                 </Button>
                 <span className="text-sm text-gray-500">{selectedFile ? selectedFile.name : "Tidak ada file yang dipilih"}</span>
               </div>
-              <input id="laptop-image" type="file" accept="image/*" onChange={handleFileChange} className="sr-only" />
+              <input id="laptop-image" type="file" accept="image/*" onChange={handleFileChange} className="sr-only" required />
             </div>
           </div>
 

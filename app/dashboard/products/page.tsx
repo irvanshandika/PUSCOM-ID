@@ -1,20 +1,20 @@
 import React from "react";
 import Sidebar from "@/src/components/Sidebar";
-import ServiceBoardPage from "./main";
+import AddProductPagePage from "./main";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Service Board",
+  title: "Tambah Produk",
 };
 
-function ServiceBoard() {
+function AddProductPage() {
   return (
     <>
       <Sidebar>
-        <ServiceBoardPage />
+        <AddProductPagePage />
       </Sidebar>
     </>
   );
 }
 
-export default ServiceBoard;
+export default AddProductPage;

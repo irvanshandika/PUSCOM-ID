@@ -38,7 +38,7 @@ function ServisPage() {
   if (!user) {
     // If user is not authenticated, show sign-in prompt
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <h2 className="text-2xl font-semibold mb-4">Anda Harus Melakukan Masuk Terlebih Dahulu</h2>
         <Button onPress={() => router.push("/auth/signin")} color="primary">
           Masuk
