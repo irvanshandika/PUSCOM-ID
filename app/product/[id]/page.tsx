@@ -23,13 +23,13 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+export default function ProductPage() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white">
         <Navbar />
         <main className="container mx-auto px-4 py-12">
-          <ProductDetail id={params.id} />
+          <ProductDetail />
         </main>
         <Footer />
       </div>
