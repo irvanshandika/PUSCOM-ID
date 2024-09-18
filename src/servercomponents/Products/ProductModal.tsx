@@ -3,10 +3,10 @@ import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input
 import { useDropzone, FileRejection } from "react-dropzone";
 import { Upload } from "lucide-react";
 import Image from "next/image";
-import { toast } from "react-hot-toast"; // Import react hot toast
-import { db, storage } from "@/src/config/FirebaseConfig"; // Import Firebase instance
-import { addDoc, collection } from "firebase/firestore"; // Firestore for database
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"; // Firestore Storage
+import { toast } from "react-hot-toast";
+import { db, storage } from "@/src/config/FirebaseConfig";
+import { addDoc, collection } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const productCategories = [
   { label: "Komputer", value: "computer" },
@@ -76,7 +76,7 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
         price: price,
         stock: stock,
         description: description,
-        image: imageUrl, // Save image URL to Firestore
+        image: imageUrl,
         createdAt: new Date(),
       });
 
@@ -102,47 +102,47 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onClose} size="2xl">
+    <Modal isOpen={isOpen} onOpenChange={onClose} size="2xl" scrollBehavior="inside">
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">Tambah Produk Baru</ModalHeader>
-            <ModalBody>
-              <Input label="Nama Produk" placeholder="Masukkan nama produk" required isRequired value={productName} onChange={(e) => setProductName(e.target.value)} />
-              <Select label="Kategori" placeholder="Pilih kategori produk" required isRequired value={category} onChange={(e) => setCategory(e.target.value)}>
+            <ModalHeader className="flex flex-col gap-1 text-lg">Tambah Produk Baru</ModalHeader>
+            <ModalBody className="gap-4">
+              <Input label="Nama Produk" placeholder="Masukkan nama produk" required isRequired value={productName} onChange={(e) => setProductName(e.target.value)} size="sm" />
+              <Select label="Kategori" placeholder="Pilih kategori produk" required isRequired value={category} onChange={(e) => setCategory(e.target.value)} size="sm">
                 {productCategories.map((category) => (
                   <SelectItem key={category.value} value={category.value}>
                     {category.label}
                   </SelectItem>
                 ))}
               </Select>
-              <Input label="Harga" placeholder="Masukkan harga produk" type="number" required isRequired value={price?.toString() ?? ""} onChange={(e) => setPrice(Number(e.target.value))} />
-              <Input label="Stok" placeholder="Masukkan jumlah stok" type="number" required isRequired value={stock?.toString() ?? ""} onChange={(e) => setStock(Number(e.target.value))} />
-              <Textarea label="Deskripsi Barang" required isRequired value={description} onChange={(e) => setDescription(e.target.value)}></Textarea>
-              <div className="mt-4">
+              <Input label="Harga" placeholder="Masukkan harga produk" type="number" required isRequired value={price?.toString() ?? ""} onChange={(e) => setPrice(Number(e.target.value))} size="sm" />
+              <Input label="Stok" placeholder="Masukkan jumlah stok" type="number" required isRequired value={stock?.toString() ?? ""} onChange={(e) => setStock(Number(e.target.value))} size="sm" />
+              <Textarea label="Deskripsi Barang" required isRequired value={description} onChange={(e) => setDescription(e.target.value)} size="sm" />
+              <div className="mt-2">
                 <p className="text-small font-medium mb-2">
                   Gambar Produk <span className="text-red-500">*</span>
                 </p>
-                <div {...getRootProps()} className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer ${isDragActive ? "border-primary" : "border-gray-300"}`}>
+                <div {...getRootProps()} className={`border-2 border-dashed rounded-lg p-2 text-center cursor-pointer ${isDragActive ? "border-primary" : "border-gray-300"}`}>
                   <input {...getInputProps()} />
                   {imagePreview ? (
-                    <Image src={imagePreview} alt="Preview" className="mx-auto max-h-40 object-contain" width={0} height={0} />
+                    <Image src={imagePreview} alt="Preview" className="mx-auto max-h-32 object-contain" width={0} height={0} sizes="100vw" style={{ width: "100%", height: "auto" }} />
                   ) : (
                     <div>
-                      <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                      <p className="mt-2">Drag & drop gambar produk di sini, atau klik untuk memilih file</p>
-                      <p className="text-small text-gray-500">(Hanya file gambar dengan format JPG, JPEG, PNG, WEBP, atau GIF)</p>
+                      <Upload className="mx-auto h-8 w-8 text-gray-400" />
+                      <p className="mt-1 text-xs">Drag & drop gambar produk di sini, atau klik untuk memilih file</p>
+                      <p className="text-xs text-gray-500">(Hanya file gambar dengan format JPG, JPEG, PNG, WEBP, atau GIF)</p>
                     </div>
                   )}
                 </div>
-                {uploadedImage && <p className="mt-2 text-small text-gray-500">File terpilih: {uploadedImage.name}</p>}
+                {uploadedImage && <p className="mt-1 text-xs text-gray-500">File terpilih: {uploadedImage.name}</p>}
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
+              <Button color="danger" variant="light" onPress={onClose} size="sm">
                 Batal
               </Button>
-              <Button color="primary" onPress={handleSubmit} isDisabled={isSubmitting}>
+              <Button color="primary" onPress={handleSubmit} isDisabled={isSubmitting} size="sm">
                 {isSubmitting ? "Menyimpan..." : "Simpan"}
               </Button>
             </ModalFooter>

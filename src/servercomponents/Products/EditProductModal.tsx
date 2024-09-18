@@ -40,6 +40,7 @@ export default function EditProductModal({ isOpen, onClose, product }: EditProdu
   const [price, setPrice] = useState<number>(product.price);
   const [stock, setStock] = useState<number>(product.stock);
   const [description, setDescription] = useState(product.description);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Update state when product prop changes
@@ -79,6 +80,7 @@ export default function EditProductModal({ isOpen, onClose, product }: EditProdu
       return;
     }
 
+    setIsSubmitting(true);
     try {
       let imageUrl = product.image;
 
@@ -110,46 +112,48 @@ export default function EditProductModal({ isOpen, onClose, product }: EditProdu
   };
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onClose} size="2xl">
+    <Modal isOpen={isOpen} onOpenChange={onClose} size="2xl" scrollBehavior="inside">
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">Edit Produk</ModalHeader>
-            <ModalBody className="overflow-y-scroll">
-              <Input label="Nama Produk" placeholder="Masukkan nama produk" required isRequired value={productName} onChange={(e) => setProductName(e.target.value)} />
-              <Select label="Kategori" placeholder="Pilih kategori produk" required isRequired selectedKeys={[category]} onSelectionChange={(keys) => setCategory(Array.from(keys)[0] as string)}>
+            <ModalHeader className="flex flex-col gap-1 text-lg">Edit Produk</ModalHeader>
+            <ModalBody className="gap-4">
+              <Input label="Nama Produk" placeholder="Masukkan nama produk" required isRequired value={productName} onChange={(e) => setProductName(e.target.value)} size="sm" />
+              <Select label="Kategori" placeholder="Pilih kategori produk" required isRequired selectedKeys={[category]} onSelectionChange={(keys) => setCategory(Array.from(keys)[0] as string)} size="sm">
                 {productCategories.map((cat) => (
                   <SelectItem key={cat.value} value={cat.value}>
                     {cat.label}
                   </SelectItem>
                 ))}
               </Select>
-              <Input label="Harga" placeholder="Masukkan harga produk" type="number" required isRequired value={price.toString()} onChange={(e) => setPrice(Number(e.target.value))} />
-              <Input label="Stok" placeholder="Masukkan jumlah stok" type="number" required isRequired value={stock.toString()} onChange={(e) => setStock(Number(e.target.value))} />
-              <Textarea label="Deskripsi Barang" required isRequired value={description} onChange={(e) => setDescription(e.target.value)}></Textarea>
-              <div className="mt-4">
-                <p className="text-small font-medium mb-2">Gambar Produk</p>
-                <div {...getRootProps()} className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer ${isDragActive ? "border-primary" : "border-gray-300"}`}>
+              <Input label="Harga" placeholder="Masukkan harga produk" type="number" required isRequired value={price.toString()} onChange={(e) => setPrice(Number(e.target.value))} size="sm" />
+              <Input label="Stok" placeholder="Masukkan jumlah stok" type="number" required isRequired value={stock.toString()} onChange={(e) => setStock(Number(e.target.value))} size="sm" />
+              <Textarea label="Deskripsi Barang" required isRequired value={description} onChange={(e) => setDescription(e.target.value)} size="sm"></Textarea>
+              <div className="mt-2">
+                <p className="text-small font-medium mb-2">
+                  Gambar Produk <span className="text-red-500">*</span>
+                </p>
+                <div {...getRootProps()} className={`border-2 border-dashed rounded-lg p-2 text-center cursor-pointer ${isDragActive ? "border-primary" : "border-gray-300"}`}>
                   <input {...getInputProps()} />
                   {imagePreview ? (
-                    <Image src={imagePreview} alt="Preview" className="mx-auto max-h-40 object-contain" width={160} height={160} />
+                    <Image src={imagePreview} alt="Preview" className="mx-auto max-h-32 object-contain" width={0} height={0} sizes="100vw" style={{ width: "100%", height: "auto" }} />
                   ) : (
                     <div>
-                      <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                      <p className="mt-2">Drag & drop gambar produk di sini, atau klik untuk memilih file</p>
-                      <p className="text-small text-gray-500">(Hanya file gambar dengan format JPG, JPEG, PNG, atau GIF)</p>
+                      <Upload className="mx-auto h-8 w-8 text-gray-400" />
+                      <p className="mt-1 text-xs">Drag & drop gambar produk di sini, atau klik untuk memilih file</p>
+                      <p className="text-xs text-gray-500">(Hanya file gambar dengan format JPG, JPEG, PNG, atau GIF)</p>
                     </div>
                   )}
                 </div>
-                {uploadedImage && <p className="mt-2 text-small text-gray-500">File terpilih: {uploadedImage.name}</p>}
+                {uploadedImage && <p className="mt-1 text-xs text-gray-500">File terpilih: {uploadedImage.name}</p>}
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
+              <Button color="danger" variant="light" onPress={onClose} size="sm">
                 Batal
               </Button>
-              <Button color="primary" onPress={handleSubmit}>
-                Simpan Perubahan
+              <Button color="primary" onPress={handleSubmit} isDisabled={isSubmitting} size="sm">
+                {isSubmitting ? "Menyimpan..." : "Simpan Perubahan"}
               </Button>
             </ModalFooter>
           </>
