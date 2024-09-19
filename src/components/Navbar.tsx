@@ -99,6 +99,9 @@ function Navbar() {
               <Link href="/service" className={`font-medium focus:outline-none ${isActive("/service") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
                 Service
               </Link>
+              <Link href="/contact" className={`font-medium focus:outline-none ${isActive("/contact") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
+                Kontak
+              </Link>
             </div>
           </div>
         </nav>

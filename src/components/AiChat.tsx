@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, Button, useDisclosure, Textarea, SelectItem, Select } from "@nextui-org/react";
 import { Bot, Send } from "lucide-react";
 import MarkdownIt from "markdown-it";
@@ -54,44 +54,40 @@ export default function AIChatModal() {
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const chatStartedRef = useRef(false);
 
-  // Modify the prompt to direct the AI towards computer-related topics
-  const buildPrompt = (input: string) => {
-    const basePrompt = `You are Jackie AI, an expert assistant in computers and laptops, helping users with buying, troubleshooting, and understanding specs of computing devices.`;
-    return `${basePrompt}\n\nUser: ${input}`;
-  };
+  useEffect(() => {
+    if (isOpen && !chatStartedRef.current) {
+      setMessages([
+        {
+          text: "Halo! Saya Jackie AI dari PUSCOM, asisten web cerdas yang siap membantu Anda dengan segala hal seputar komputer dan laptop. Ada yang bisa saya bantu?",
+          isUser: false,
+        },
+      ]);
+      chatStartedRef.current = true;
+    }
+  }, [isOpen]);
 
   const handleSendMessage = async () => {
-    if (inputMessage.trim()) {
-      setMessages([...messages, { text: inputMessage, isUser: true }]);
-      setInputMessage("");
-      setIsLoading(true);
+    if (!inputMessage.trim()) return;
 
-      try {
-        // Handle specific greeting cases like "Halo Jackie"
-        if (/halo jackie/i.test(inputMessage)) {
-          setMessages((prev) => [...prev, { text: "Halo! Saya Jackie, asisten Anda untuk semua hal tentang komputer dan laptop. Ada yang bisa saya bantu?", isUser: false }]);
-          setIsLoading(false);
-          return;
-        }
+    const userMessage = { text: inputMessage, isUser: true };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setInputMessage("");
+    setIsLoading(true);
 
-        // Modify the prompt for computer-related context
-        const prompt = buildPrompt(inputMessage);
-        const result = await startChat.sendMessageStream(prompt);
-
-        const buffer: string[] = [];
-        for await (const response of result.stream) {
-          buffer.push(response.text());
-        }
-
-        // Render the AI's response
-        setMessages((prev) => [...prev, { text: md.render(buffer.join("")), isUser: false }]);
-      } catch (error) {
-        setMessages((prev) => [...prev, { text: "Terjadi kesalahan dalam mendapatkan respons dari AI.", isUser: false }]);
-      } finally {
-        setIsLoading(false);
-      }
+    try {
+      const chat = await startChat;
+      const result = await chat.sendMessage(inputMessage);
+      const response = result.response;
+      const aiMessage = { text: response.text(), isUser: false };
+      setMessages((prevMessages) => [...prevMessages, aiMessage]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setMessages((prevMessages) => [...prevMessages, { text: "Maaf, terjadi kesalahan. Silakan coba lagi.", isUser: false }]);
     }
+
+    setIsLoading(false);
   };
 
   const handlePromptSelect = (value: string) => {
@@ -107,7 +103,17 @@ export default function AIChatModal() {
         <Bot size={32} />
       </Button>
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl" scrollBehavior="inside">
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            chatStartedRef.current = false;
+            setMessages([]);
+          }
+          onOpenChange();
+        }}
+        size="2xl"
+        scrollBehavior="inside">
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
             <div className="flex justify-between items-center w-full">
@@ -117,17 +123,18 @@ export default function AIChatModal() {
           <ModalBody>
             <div className="space-y-4 mb-4">
               {messages.map((message, index) => (
-                <div key={index} className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[70%] p-3 rounded-lg ${message.isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}>
-                    <div dangerouslySetInnerHTML={{ __html: message.text }} />
-                  </div>
-                </div>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className={`p-2 rounded-lg ${message.isUser ? "bg-primary text-white ml-auto" : "bg-gray-200 mr-auto"} max-w-[80%]`}>
+                  <div dangerouslySetInnerHTML={{ __html: md.render(message.text) }} />
+                </motion.div>
               ))}
               {isLoading && (
-                <div className="flex justify-start">
-                  <div className="max-w-[70%] p-3 rounded-lg bg-gray-200 text-gray-800">
-                    <LoadingDots />
-                  </div>
+                <div className="flex justify-center">
+                  <LoadingDots />
                 </div>
               )}
             </div>
