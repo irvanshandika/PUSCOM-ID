@@ -94,7 +94,7 @@ function Navbar() {
                 Home
               </Link>
               <Link href="/catalog" className={`font-medium focus:outline-none ${isActive("/catalog") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
-                Catalog
+                Katalog
               </Link>
               <Link href="/service" className={`font-medium focus:outline-none ${isActive("/service") ? "text-blue-500" : "text-inherit hover:text-gray-400"}`}>
                 Service

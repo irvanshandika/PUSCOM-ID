@@ -5,6 +5,7 @@ import Services from "@/src/sections/Services";
 import Testimonials from "@/src/sections/Testimonials";
 import Contact from "@/src/sections/Contact";
 import Footer from "@/src/components/Footer";
+import AIChatModal from "@/src/components/AiChat";
 
 function Home() {
   return (
@@ -16,6 +17,7 @@ function Home() {
           <Services />
           <Testimonials />
           <Contact />
+          <AIChatModal />
         </main>
         <Footer />
       </div>
