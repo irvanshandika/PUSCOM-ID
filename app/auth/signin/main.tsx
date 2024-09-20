@@ -154,8 +154,8 @@ const SignInPage: React.FC = () => {
         <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Login ke PUSCOM</h1>
         <p className="text-center text-gray-600 mb-6">Silahkan masuk untuk mengakses layanan kami</p>
         <form onSubmit={handleSignIn} className="space-y-4">
-          <Input label="Email" placeholder="Masukkan email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <Input label="Password" placeholder="Masukkan password Anda" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Input label="Email" placeholder="Masukkan email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" isRequired required />
+          <Input label="Password" placeholder="Masukkan password Anda" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="password" isRequired required />
           <Button type="submit" className="w-full bg-blue-600 text-white rounded-full py-3 font-bold hover:bg-blue-700">
             Masuk
           </Button>
@@ -174,7 +174,7 @@ const SignInPage: React.FC = () => {
           </Link>
         </p>
         <p className="mt-2 text-center text-sm text-gray-600">
-          <Link href="/forgot-password" className="text-blue-600 hover:underline">
+          <Link href="/reset-password" className="text-blue-600 hover:underline">
             Lupa password?
           </Link>
         </p>

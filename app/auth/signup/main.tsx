@@ -101,9 +101,9 @@ const SignUpPage: React.FC = () => {
         <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Daftar Akun PUSCOM</h1>
         <p className="text-center text-gray-600 mb-6">Silahkan daftar untuk membeli, menjual, atau memperbaiki perangkat komputer Anda</p>
         <form onSubmit={handleSignUp} className="space-y-4">
-          <Input label="Full Name" placeholder="Masukkan email Anda" type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-          <Input label="Email" placeholder="Masukkan email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <Input label="Password" placeholder="Masukkan password Anda" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Input label="Full Name" placeholder="Masukkan email Anda" type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} isRequired required />
+          <Input label="Email" placeholder="Masukkan email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} isRequired required />
+          <Input label="Password" placeholder="Masukkan password Anda" type="password" value={password} onChange={(e) => setPassword(e.target.value)} isRequired required />
           <Button type="submit" className="w-full bg-blue-600 text-white rounded-full py-3 font-bold hover:bg-blue-700">
             Daftar Sekarang
           </Button>
