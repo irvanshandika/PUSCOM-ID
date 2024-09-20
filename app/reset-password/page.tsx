@@ -3,7 +3,7 @@ import ForgotPasswordPage from "./main";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sign In | May Beauty Skin",
+  title: "Reset Password",
 };
 
 function ForgotPassword() {

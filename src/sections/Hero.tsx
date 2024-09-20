@@ -6,15 +6,17 @@ import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
   const [search, setSearch] = useState("");
-
   const router = useRouter();
-  const handleSearch = (e: { preventDefault: () => void }) => {
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/result?search=" + search);
+    if (search.trim()) {
+      router.push("/result?search=" + search);
+    }
   };
 
   return (
-    <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20 mt-[5vh]">
+    <div className="bg-cover bg-no-repeat bg-center text-white py-20 mt-[5vh]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb')" }}>
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">Temukan Komputer Impian Anda</h1>

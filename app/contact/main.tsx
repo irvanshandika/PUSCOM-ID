@@ -16,7 +16,6 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Implementasi pengiriman formulir akan ditambahkan di sini
     console.log("Form submitted", { name, email, subject, message });
   };
 

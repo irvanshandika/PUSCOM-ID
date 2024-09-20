@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardBody, CardFooter, Button, Pagination, Chip, Input, Select, SelectItem } from "@nextui-org/react";
 import { Search, ShoppingCart, Filter } from "lucide-react";
 import Image from "next/image";
-import { collection, query, getDocs } from "firebase/firestore"; // Import Firestore methods
-import { db } from "@/src/config/FirebaseConfig"; // Adjust this to your Firebase config path
+import { collection, query, getDocs } from "firebase/firestore";
+import { db } from "@/src/config/FirebaseConfig";
 
 type Product = {
   id: string;
@@ -22,15 +22,16 @@ const categories = ["Semua", "Laptop", "Storage", "Peripheral", "Monitor"];
 export default function SearchResults() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const queryParam = searchParams.get("query");
+  const queryParam = searchParams.get("search");
   const [searchTerm, setSearchTerm] = useState(queryParam || "");
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const productsPerPage = 8;
 
   const fetchProducts = async () => {
-    const q = query(collection(db, "products")); // Adjust "products" to your Firestore collection name
+    const q = query(collection(db, "products"));
     const querySnapshot = await getDocs(q);
     const products: Product[] = [];
 
@@ -41,25 +42,30 @@ export default function SearchResults() {
     return products;
   };
 
-  // Update search term from query params
+  useEffect(() => {
+    fetchProducts().then((products) => {
+      setAllProducts(products);
+    });
+  }, []);
+
   useEffect(() => {
     if (queryParam) {
       setSearchTerm(queryParam);
     }
   }, [queryParam]);
 
-  // Filter products based on search term and category
   useEffect(() => {
     const lowercasedSearch = searchTerm.toLowerCase();
 
-    fetchProducts().then((products) => {
-      const filtered = products.filter(
-        (product) => (selectedCategory === "Semua" || product.category === selectedCategory) && (product.name.toLowerCase().includes(lowercasedSearch) || product.description.toLowerCase().includes(lowercasedSearch))
-      );
-      setFilteredProducts(filtered);
-      setCurrentPage(1);
+    const filtered = allProducts.filter((product) => {
+      const categoryMatch = selectedCategory === "Semua" || product.category.toLowerCase() === selectedCategory.toLowerCase();
+      const searchMatch = product.name.toLowerCase().includes(lowercasedSearch) || product.description.toLowerCase().includes(lowercasedSearch);
+      return categoryMatch && searchMatch;
     });
-  }, [searchTerm, selectedCategory]);
+
+    setFilteredProducts(filtered);
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, allProducts]);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -71,10 +77,8 @@ export default function SearchResults() {
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
-    router.push(`/result?query=${encodeURIComponent(value)}`, { scroll: false });
   };
 
-  // Update page title dynamically
   useEffect(() => {
     if (searchTerm) {
       document.title = `Hasil Pencarian untuk "${searchTerm}"`;
@@ -83,11 +87,11 @@ export default function SearchResults() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Hasil Pencarian untuk "{searchTerm}"</h1>
+      <h1 className="text-2xl font-bold mb-6">Hasil Pencarian</h1>
 
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <Input placeholder="Cari produk..." value={searchTerm} onChange={(e) => handleSearch(e.target.value)} startContent={<Search className="text-gray-400" />} className="md:w-1/2" />
-        <Select placeholder="Pilih kategori" selectedKeys={[selectedCategory]} onChange={(e) => setSelectedCategory(e.target.value)} startContent={<Filter className="text-gray-400" />} className="md:w-1/4">
+        <Select placeholder="Pilih kategori" selectedKeys={[selectedCategory]} onSelectionChange={(keys) => setSelectedCategory(Array.from(keys)[0] as string)} startContent={<Filter className="text-gray-400" />} className="md:w-1/4">
           {categories.map((category) => (
             <SelectItem key={category} value={category}>
               {category}
@@ -98,7 +102,7 @@ export default function SearchResults() {
 
       {filteredProducts.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-xl font-semibold mb-4">Maaf, "{searchTerm}" tidak dapat ditemukan.</p>
+          <p className="text-xl font-semibold mb-4">Maaf, tidak ada produk yang sesuai dengan pencarian Anda.</p>
           <p className="text-gray-600">Coba cari dengan kata kunci lain atau pilih kategori yang berbeda</p>
         </div>
       ) : (
