@@ -44,7 +44,7 @@ export const startChat = model.startChat({
     },
   ],
   generationConfig: {
-    maxOutputTokens: 1000,
+    maxOutputTokens: 9999999,
     temperature: 0.7,
   },
 });
