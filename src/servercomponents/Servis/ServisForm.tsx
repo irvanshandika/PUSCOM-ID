@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -216,17 +217,7 @@ export default function ServisForm() {
         </div>
       ) : (
         <div id="service-receipt">
-          <ServiceReceipt
-            queueNumber={queueNumber}
-            customerName={name}
-            phoneNumber={phone}
-            email={email}
-            deviceType={jenisLaptop}
-            brand={brand}
-            model={model}
-            problemDescription={damage}
-            entryDate={new Date().toLocaleDateString()}
-          />
+          <ServiceReceipt queueNumber={queueNumber} customerName={name} phoneNumber={phone} email={email} deviceType={jenisLaptop} brand={brand} model={model} problemDescription={damage} entryDate={new Date().toLocaleDateString()} />
         </div>
       )}
     </div>

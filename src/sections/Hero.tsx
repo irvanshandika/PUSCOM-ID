@@ -16,12 +16,14 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="bg-cover bg-no-repeat bg-center text-white py-20 mt-[5vh]" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb')" }}>
-      <div className="container mx-auto px-4">
+    <div className="bg-center bg-cover bg-no-repeat text-white py-20 mt-[5vh] relative" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb')" }}>
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div> {/* Overlay transparan */}
+      <div className="container mx-auto px-4 relative z-10">
+        {" "}
+        {/* Pastikan konten berada di atas overlay */}
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">Temukan Komputer Impian Anda</h1>
-          <p className="text-xl md:text-2xl mb-8">Dari komponen terkini hingga laptop performa tinggi, kami punya semuanya</p>
-
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white shadow-lg">Temukan Komputer Impian Anda</h1> {/* Teks dengan shadow */}
+          <p className="text-xl md:text-2xl mb-8 text-white shadow-md">Dari komponen terkini hingga laptop performa tinggi, kami punya semuanya</p>
           <Card className="mb-8">
             <CardBody>
               <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
@@ -32,7 +34,6 @@ export default function HeroSection() {
               </form>
             </CardBody>
           </Card>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-center justify-center bg-white bg-opacity-10 rounded-lg p-6">
               <Cpu className="w-8 h-8 mr-3" />

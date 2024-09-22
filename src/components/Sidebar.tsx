@@ -5,12 +5,11 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { getAuth, signOut } from "firebase/auth";
 import { app } from "@/src/config/FirebaseConfig";
-import { Cog } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useRouter, usePathname } from "next/navigation";
 import ExitIcon from "./icons/ExitIcon";
 import UserIcon from "./icons/UserIcon";
-import { Package2 } from "lucide-react";
+import { Package2, Cog, UserPlus2, MailSearchIcon } from "lucide-react";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -213,6 +212,26 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     href="/dashboard/products">
                     <Package2 className="w-5 h-5" />
                     Produk
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg focus:outline-none ${
+                      isActive("/dashboard/teknisi") ? "bg-gray-900 text-white hover:bg-gray-500" : "text-gray-800 dark:text-neutral-400"
+                    } hover:bg-gray-100 dark:hover:bg-neutral-700`}
+                    href="/dashboard/teknisi">
+                    <UserPlus2 className="w-5 h-5" />
+                    Teknisi
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg focus:outline-none ${
+                      isActive("/dashboard/mail") ? "bg-gray-900 text-white hover:bg-gray-500" : "text-gray-800 dark:text-neutral-400"
+                    } hover:bg-gray-100 dark:hover:bg-neutral-700`}
+                    href="/dashboard/mail">
+                    <MailSearchIcon className="w-5 h-5" />
+                    Mail
                   </a>
                 </li>
               </ul>
