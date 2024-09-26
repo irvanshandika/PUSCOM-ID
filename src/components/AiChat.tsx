@@ -6,6 +6,7 @@ import { Bot, Send } from "lucide-react";
 import MarkdownIt from "markdown-it";
 import { startChat } from "@/src/utils/googleAI"; // Your Google Gemini AI setup
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const LoadingDots = () => {
   return (
@@ -115,12 +116,22 @@ export default function AIChatModal() {
         size="2xl"
         scrollBehavior="inside">
         <ModalContent>
-          <ModalHeader className="flex flex-col gap-1">
-            <div className="flex justify-between items-center w-full">
-              <h3 className="text-lg font-semibold">Chat dengan Asisten Jackie AI</h3>
-            </div>
-          </ModalHeader>
+          {/* <ModalHeader className="flex flex-col gap-1">
+            
+          </ModalHeader> */}
           <ModalBody>
+            <div className="flex flex-col gap-1">
+              <div className="flex justify-between items-center w-full">
+                <div className="max-w-4xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
+                  <Link className="inline-block mb-4 flex-none focus:outline-none focus:opacity-80" href="/" aria-label="PUSCOM ID">
+                    <span className="w-28 h-auto mx-auto text-blue-800 font-bold">PUSCOM</span>
+                  </Link>
+
+                  <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl dark:text-white">Welcome to Jackie AI</h1>
+                  <p className="mt-3 text-gray-600 dark:text-neutral-400">Your AI-powered copilot for the web</p>
+                </div>
+              </div>
+            </div>
             <div className="space-y-4 mb-4">
               {messages.map((message, index) => (
                 <motion.div
@@ -129,6 +140,22 @@ export default function AIChatModal() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                   className={`p-2 rounded-lg ${message.isUser ? "bg-primary text-white ml-auto" : "bg-gray-200 mr-auto"} max-w-[80%]`}>
+                  {message.isUser ? (
+                    <>
+                      <span className="shrink-0 inline-flex items-center justify-center size-[38px] rounded-full bg-gray-600">
+                        <span className="text-sm font-medium text-white leading-none">AZ</span>
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="shrink-0 size-[38px] rounded-full" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="38" height="38" rx="6" fill="#2563EB" />
+                        <path d="M10 28V18.64C10 13.8683 14.0294 10 19 10C23.9706 10 28 13.8683 28 18.64C28 23.4117 23.9706 27.28 19 27.28H18.25" stroke="white" strokeWidth="1.5" />
+                        <path d="M13 28V18.7552C13 15.5104 15.6863 12.88 19 12.88C22.3137 12.88 25 15.5104 25 18.7552C25 22 22.3137 24.6304 19 24.6304H18.25" stroke="white" strokeWidth="1.5" />
+                        <ellipse cx="19" cy="18.6554" rx="3.75" ry="3.6" fill="white" />
+                      </svg>
+                    </>
+                  )}
                   <div dangerouslySetInnerHTML={{ __html: md.render(message.text) }} />
                 </motion.div>
               ))}
@@ -145,9 +172,8 @@ export default function AIChatModal() {
                 </SelectItem>
               ))}
             </Select>
-            <div className="flex gap-2">
-              <Textarea
-                placeholder="Ketik pesan Anda di sini..."
+            <div className="relative">
+              <textarea
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={(e) => {
@@ -156,11 +182,22 @@ export default function AIChatModal() {
                     handleSendMessage();
                   }
                 }}
-                className="flex-grow"
-              />
-              <Button color="primary" isIconOnly onClick={handleSendMessage}>
-                <Send size={20} />
-              </Button>
+                className="p-4 pb-12 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                placeholder="Ketik pesan Anda di sini..."></textarea>
+
+              <div className="absolute bottom-px inset-x-px p-2 rounded-b-lg bg-white dark:bg-neutral-900">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center" />
+
+                  <div className="flex items-center gap-x-1">
+                    <button type="button" onClick={handleSendMessage} className="inline-flex shrink-0 justify-center items-center size-8 rounded-lg text-white bg-blue-600 hover:bg-blue-500 focus:z-10 focus:outline-none focus:bg-blue-500">
+                      <svg className="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </ModalBody>
         </ModalContent>

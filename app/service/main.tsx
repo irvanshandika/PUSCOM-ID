@@ -32,20 +32,23 @@ function ServisPage() {
 
   if (loadingAuth) {
     // Show a loading message while waiting for auth state
-    return <div className="flex items-center justify-center min-h-screen">Memuat...</div>;
+    return <div className="flex items-center text-2xl font-semibold justify-center py-[25vh]">Memuat...</div>;
   }
 
   if (!user) {
     // If user is not authenticated, show sign-in prompt
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <h2 className="text-2xl font-semibold mb-4 text-center lg:px-[30vw]">Anda harus masuk terlebih dahulu untuk mengakses halaman ini demi keamanan data Anda.</h2>
-        <Button onPress={() => router.push("/auth/signin")} color="primary">
+      <div className="flex flex-col items-center justify-center py-[18vh] px-4 sm:px-8">
+        <h2 className="text-2xl font-semibold mb-4 text-center max-w-xl">
+          Anda harus masuk terlebih dahulu untuk mengakses halaman ini demi keamanan data Anda.
+        </h2>
+        <Button onPress={() => router.push("/auth/signin")} color="primary" className="w-full sm:w-auto">
           Masuk
         </Button>
       </div>
     );
   }
+
   return (
     <>
       <ServisForm />

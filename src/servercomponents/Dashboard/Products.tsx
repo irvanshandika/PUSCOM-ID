@@ -1,7 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Table,
@@ -31,6 +30,7 @@ import ProductModal from "@/src/servercomponents/Products/ProductModal";
 import EditProductModal from "@/src/servercomponents/Products/EditProductModal";
 import { db } from "@/src/config/FirebaseConfig";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 import { toast } from "react-hot-toast";
 
 type Product = {
@@ -105,12 +105,19 @@ export default function ProductDashboard() {
   const confirmDelete = async () => {
     if (selectedProduct) {
       try {
+        // Hapus dokumen dari Firestore
         await deleteDoc(doc(db, "products", selectedProduct.id));
-        toast.success("Produk berhasil dihapus!");
+
+        // Hapus gambar dari Storage
+        const storage = getStorage();
+        const imageRef = ref(storage, selectedProduct.image);
+        await deleteObject(imageRef);
+
+        toast.success("Produk dan gambar berhasil dihapus!");
         fetchProducts(); // Refresh the product list
       } catch (error) {
-        toast.error("Gagal menghapus produk.");
-        console.error("Error deleting product: ", error);
+        toast.error("Gagal menghapus produk atau gambar.");
+        console.error("Error deleting product or image: ", error);
       }
     }
     setIsDeleteModalOpen(false);

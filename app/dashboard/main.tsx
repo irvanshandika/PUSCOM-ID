@@ -33,7 +33,7 @@ function DashboardPage() {
     if (user) {
       checkUserRole();
     } else if (!loading) {
-      router.push("/auth/signin"); // Redirect to login if not authenticated
+      router.push("/auth/signin");
     }
   }, [user, loading, router]);
 

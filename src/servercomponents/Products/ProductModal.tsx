@@ -1,30 +1,24 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { useDropzone, FileRejection } from "react-dropzone";
 import { Upload } from "lucide-react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
-import { db, storage } from "@/src/config/FirebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import useProductStore from "@/src/store/productStore";
 
 const productCategories = [
-  { label: "Komputer", value: "computer" },
-  { label: "Laptop", value: "laptop" },
-  { label: "Spare Part", value: "spare_part" },
-  { label: "Penyimpanan", value: "storage" },
-  { label: "Periferal", value: "peripheral" },
+  { label: "Komputer", value: "Computer" },
+  { label: "Laptop", value: "Laptop" },
+  { label: "Spare Part", value: "Spare Part" },
+  { label: "Penyimpanan", value: "Storage" },
+  { label: "Periferal", value: "Peripheral" },
 ];
 
 export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [productName, setProductName] = useState("");
-  const [category, setCategory] = useState("");
-  const [price, setPrice] = useState<number | null>(null);
-  const [stock, setStock] = useState<number | null>(null);
-  const [description, setDescription] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    productName, category, price, stock, description, imagePreview, isSubmitting,
+    setProductName, setCategory, setPrice, setStock, setDescription, handleImageUpload, submitProduct
+  } = useProductStore();
 
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
     if (fileRejections.length > 0) {
@@ -33,18 +27,8 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
     }
 
     const file = acceptedFiles[0];
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error("Maaf, Ukuran Melebihi Batas 10MB");
-      return;
-    }
-
-    setUploadedImage(file);
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImagePreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  }, []);
+    handleImageUpload(file);
+  }, [handleImageUpload]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -56,49 +40,8 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
   });
 
   const handleSubmit = async () => {
-    if (isSubmitting) return; // Prevent multiple submits
-    if (!productName || !category || !price || !stock || !description || !uploadedImage) {
-      toast.error("Harap lengkapi semua data!");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      // Upload image to Firebase Storage
-      const imageRef = ref(storage, `products/${uploadedImage.name}`);
-      await uploadBytes(imageRef, uploadedImage);
-      const imageUrl = await getDownloadURL(imageRef);
-
-      // Save product data to Firestore
-      await addDoc(collection(db, "products"), {
-        name: productName,
-        category: category,
-        price: price,
-        stock: stock,
-        description: description,
-        image: imageUrl,
-        createdAt: new Date(),
-      });
-
-      toast.success("Produk berhasil ditambahkan!");
-      resetForm();
-      onClose();
-    } catch (error) {
-      toast.error("Terjadi kesalahan saat menyimpan produk.");
-      console.error("Error adding product: ", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const resetForm = () => {
-    setProductName("");
-    setCategory("");
-    setPrice(null);
-    setStock(null);
-    setDescription("");
-    setUploadedImage(null);
-    setImagePreview(null);
+    await submitProduct();
+    onClose();
   };
 
   return (
@@ -110,9 +53,9 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
             <ModalBody className="gap-4">
               <Input label="Nama Produk" placeholder="Masukkan nama produk" required isRequired value={productName} onChange={(e) => setProductName(e.target.value)} size="sm" />
               <Select label="Kategori" placeholder="Pilih kategori produk" required isRequired value={category} onChange={(e) => setCategory(e.target.value)} size="sm">
-                {productCategories.map((category) => (
-                  <SelectItem key={category.value} value={category.value}>
-                    {category.label}
+                {productCategories.map((cat) => (
+                  <SelectItem key={cat.value} value={cat.value}>
+                    {cat.label}
                   </SelectItem>
                 ))}
               </Select>
@@ -135,7 +78,6 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
                     </div>
                   )}
                 </div>
-                {uploadedImage && <p className="mt-1 text-xs text-gray-500">File terpilih: {uploadedImage.name}</p>}
               </div>
             </ModalBody>
             <ModalFooter>

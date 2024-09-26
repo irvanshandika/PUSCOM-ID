@@ -217,11 +217,11 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                 <li>
                   <a
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg focus:outline-none ${
-                      isActive("/dashboard/teknisi") ? "bg-gray-900 text-white hover:bg-gray-500" : "text-gray-800 dark:text-neutral-400"
+                      isActive("/dashboard/users") ? "bg-gray-900 text-white hover:bg-gray-500" : "text-gray-800 dark:text-neutral-400"
                     } hover:bg-gray-100 dark:hover:bg-neutral-700`}
-                    href="/dashboard/teknisi">
+                    href="/dashboard/users">
                     <UserPlus2 className="w-5 h-5" />
-                    Teknisi
+                    Users
                   </a>
                 </li>
                 <li>

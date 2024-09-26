@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { Card, CardHeader, CardBody, CardFooter, Divider, Button } from "@nextui-org/react";
 import { Printer, Download } from "lucide-react";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 interface ServiceReceiptProps {
   queueNumber: string;
@@ -17,18 +17,7 @@ interface ServiceReceiptProps {
   estimatedCompletionDate?: string;
 }
 
-export default function ServiceReceipt({ 
-  queueNumber, 
-  customerName, 
-  phoneNumber, 
-  email, 
-  deviceType, 
-  brand, 
-  model, 
-  problemDescription, 
-  entryDate,
-  estimatedCompletionDate 
-}: ServiceReceiptProps) {
+export default function ServiceReceipt({ queueNumber, customerName, phoneNumber, email, deviceType, brand, model, problemDescription, entryDate, estimatedCompletionDate }: ServiceReceiptProps) {
   const receiptRef = useRef(null);
 
   const handlePrint = () => {
@@ -38,17 +27,17 @@ export default function ServiceReceipt({
   const handleDownload = () => {
     if (receiptRef.current) {
       html2canvas(receiptRef.current, { scale: 2 }).then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
+        const imgData = canvas.toDataURL("image/png");
         const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a4'
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4",
         });
         const imgProps = pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save('service_receipt.pdf');
+        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+        pdf.save("service_receipt.pdf");
       });
     }
   };
@@ -60,7 +49,8 @@ export default function ServiceReceipt({
           body * {
             visibility: hidden;
           }
-          #service-receipt, #service-receipt * {
+          #service-receipt,
+          #service-receipt * {
             visibility: visible;
           }
           #service-receipt {

@@ -1,6 +1,6 @@
-'use client'
+"use client";
 import React, { useState, useEffect } from "react";
-import { Card, CardBody, CardFooter, Image, Button, Pagination, Input, Select, SelectItem, Spinner } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Image, Button, Pagination, Input, Select, SelectItem, Spinner, Chip } from "@nextui-org/react";
 import { Search, ShoppingCart } from "lucide-react";
 import { db } from "@/src/config/FirebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
@@ -18,14 +18,29 @@ type Product = {
 
 const productCategories = [
   { label: "Semua Kategori", value: "all" },
-  { label: "Laptop", value: "laptop" },
-  { label: "Spare Part", value: "spare_part" },
-  { label: "Penyimpanan", value: "storage" },
-  { label: "Periferal", value: "peripheral" },
+  { label: "Laptop", value: "Laptop" },
+  { label: "Spare Part", value: "Spare Part" },
+  { label: "Penyimpanan", value: "Storage" },
+  { label: "Periferal", value: "Peripheral" },
 ];
 
 const formatPrice = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
+const getCategoryColor = (category: string) => {
+  switch (category) {
+    case "Laptop":
+      return "primary";
+    case "Spare Part":
+      return "secondary";
+    case "Storage":
+      return "success";
+    case "Peripheral":
+      return "warning";
+    default:
+      return "default";
+  }
 };
 
 export default function ProductCatalog() {
@@ -57,11 +72,7 @@ export default function ProductCatalog() {
     fetchProducts();
   }, []);
 
-  const filteredProducts = products.filter(
-    (product) =>
-      (selectedCategory === "all" || product.category === selectedCategory) &&
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProducts = products.filter((product) => (selectedCategory === "all" || product.category === selectedCategory) && product.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const pages = Math.ceil(filteredProducts.length / rowsPerPage);
 
@@ -85,19 +96,8 @@ export default function ProductCatalog() {
       <h1 className="text-2xl font-bold mb-6">Katalog Produk</h1>
 
       <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <Input 
-          placeholder="Cari produk..." 
-          value={searchTerm} 
-          onChange={(e) => setSearchTerm(e.target.value)} 
-          startContent={<Search className="text-gray-400" />} 
-          className="md:w-1/2" 
-        />
-        <Select 
-          placeholder="Pilih kategori" 
-          value={selectedCategory} 
-          onChange={(e) => setSelectedCategory(e.target.value)} 
-          className="md:w-1/4"
-        >
+        <Input placeholder="Cari produk..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} startContent={<Search className="text-gray-400" />} className="md:w-1/2" />
+        <Select placeholder="Pilih kategori" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="md:w-1/4">
           {productCategories.map((category) => (
             <SelectItem key={category.value} value={category.value}>
               {category.label}
@@ -106,39 +106,35 @@ export default function ProductCatalog() {
         </Select>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-        {items.map((product) => (
-          <Card key={product.id} className="w-full">
-            <CardBody className="p-0 flex justify-center items-center">
-              <Image 
-                src={product.image} 
-                alt={product.name} 
-                className="w-full h-48 object-cover" 
-              />
-            </CardBody>
-            <CardFooter className="flex flex-col items-start">
-              <h3 className="font-semibold text-lg mb-1">{product.name}</h3>
-              <p className="text-default-500 text-sm mb-2">{product.category}</p>
-              <p className="font-bold text-lg mb-2">Rp {formatPrice(product.price)}</p>
-              <p className="text-sm mb-2">Stok: {product.stock}</p>
-              <Button 
-                color="primary" 
-                endContent={<ShoppingCart className="h-4 w-4" />}
-                onClick={() => router.push(`/product/${product.id}`)}
-              >
-                Lihat Produk
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+      {items.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-xl font-semibold">Maaf, kategori {selectedCategory === "all" ? "yang dipilih" : `"${productCategories.find((cat) => cat.value === selectedCategory)?.label}"`} tidak tersedia/kosong</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+          {items.map((product) => (
+            <Card key={product.id} className="w-full">
+              <CardBody className="p-0 flex justify-center items-center">
+                <Image src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+              </CardBody>
+              <CardFooter className="flex flex-col items-start">
+                <h3 className="font-semibold text-lg mb-1">{product.name}</h3>
+                <Chip color={getCategoryColor(product.category)} variant="flat" className="mb-2">
+                  {product.category}
+                </Chip>
+                <p className="font-bold text-lg mb-2">Rp {formatPrice(product.price)}</p>
+                <p className="text-sm mb-2">Stok: {product.stock}</p>
+                <Button color="primary" endContent={<ShoppingCart className="h-4 w-4" />} onClick={() => router.push(`/product/${product.id}`)}>
+                  Lihat Produk
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
 
       <div className="flex justify-center">
-        <Pagination 
-          total={pages} 
-          page={page} 
-          onChange={(page) => setPage(page)} 
-        />
+        <Pagination total={pages} page={page} onChange={(page) => setPage(page)} />
       </div>
     </div>
   );

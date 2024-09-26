@@ -22,7 +22,7 @@ export default function ServisForm() {
   const [phone, setPhone] = useState("");
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
-  const [jenisLaptop, setJenisLaptop] = useState("");
+  const [perangkat, setPerangkat] = useState("");
   const [damage, setDamage] = useState("");
   const [tanggal, setTanggal] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -88,7 +88,7 @@ export default function ServisForm() {
         brand,
         model,
         damage,
-        jenisLaptop,
+        perangkat,
         status: "pending",
         tanggal,
         imageUrl,
@@ -132,7 +132,7 @@ export default function ServisForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 pt-[4vh] pb-[10vh]">
+    <div className="flex items-center justify-center">
       {!showReceipt ? (
         <div className="max-w-2xl w-full space-y-8 bg-white p-6 rounded-xl shadow-lg">
           <div className="text-center">
@@ -168,9 +168,9 @@ export default function ServisForm() {
                 </SelectItem>
               </Select>
               <Input type="text" placeholder="Masukkan model laptop Anda" variant="bordered" labelPlacement="outside" fullWidth value={model} onChange={(e) => setModel(e.target.value)} required />
-              <RadioGroup label="Jenis Perangkat" value={jenisLaptop} onChange={(e) => setJenisLaptop(e.target.value)} isRequired>
-                <Radio value="komputer">Komputer</Radio>
-                <Radio value="laptop">Laptop</Radio>
+              <RadioGroup label="Jenis Perangkat" value={perangkat} onChange={(e) => setPerangkat(e.target.value)} isRequired>
+                <Radio value="Komputer">Komputer</Radio>
+                <Radio value="Laptop">Laptop</Radio>
               </RadioGroup>
               <DateInput label="Pilih tanggal servis" variant="bordered" labelPlacement="outside" value={tanggal ? parseDate(tanggal) : null} onChange={(date) => setTanggal(date?.toString() || "")} isRequired />
               <Textarea placeholder="Jelaskan kerusakan yang dialami laptop Anda" variant="bordered" labelPlacement="outside" minRows={3} value={damage} onChange={(e) => setDamage(e.target.value)} isRequired required />
@@ -217,7 +217,7 @@ export default function ServisForm() {
         </div>
       ) : (
         <div id="service-receipt">
-          <ServiceReceipt queueNumber={queueNumber} customerName={name} phoneNumber={phone} email={email} deviceType={jenisLaptop} brand={brand} model={model} problemDescription={damage} entryDate={new Date().toLocaleDateString()} />
+          <ServiceReceipt queueNumber={queueNumber} customerName={name} phoneNumber={phone} email={email} deviceType={perangkat} brand={brand} model={model} problemDescription={damage} entryDate={new Date().toLocaleDateString()} />
         </div>
       )}
     </div>

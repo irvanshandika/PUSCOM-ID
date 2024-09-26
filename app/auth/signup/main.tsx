@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { Input, Button } from "@nextui-org/react";
 import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile, fetchSignInMethodsForEmail } from "firebase/auth";
@@ -9,11 +8,10 @@ import { app } from "@/src/config/FirebaseConfig";
 import { GoogleIcon } from "@/src/components/icons/GoogleIcon";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
+import { useSignUpStore } from "@/src/store/signUpStore";
 
 const SignUpPage: React.FC = () => {
-  const [displayName, setDisplayName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { displayName, email, password, setDisplayName, setEmail, setPassword } = useSignUpStore();
   const router = useRouter();
 
   const auth = getAuth(app);
@@ -52,8 +50,9 @@ const SignUpPage: React.FC = () => {
         email,
         photoURL: defaultPhotoURL,
         uid: user.uid,
-        accountType: "customer",
+        roles: "customer",
         signType: "credential",
+        status: "Aktif",
       });
 
       toast.success("Selamat! Anda berhasil mendaftar.");
@@ -70,18 +69,17 @@ const SignUpPage: React.FC = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Periksa apakah pengguna sudah ada di Firestore
       const userDoc = await getDoc(doc(db, "users", user.uid));
 
       if (!userDoc.exists()) {
-        // Jika pengguna belum ada, tambahkan ke Firestore
         await setDoc(doc(db, "users", user.uid), {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL || "https://example.com/default-avatar.png",
           uid: user.uid,
-          accountType: "customer",
+          roles: "customer",
           signType: "google",
+          status: "Aktif",
         });
         toast.success("Selamat! Anda berhasil mendaftar dengan Google.");
       } else {
@@ -101,7 +99,7 @@ const SignUpPage: React.FC = () => {
         <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Daftar Akun PUSCOM</h1>
         <p className="text-center text-gray-600 mb-6">Silahkan daftar untuk membeli, menjual, atau memperbaiki perangkat komputer Anda</p>
         <form onSubmit={handleSignUp} className="space-y-4">
-          <Input label="Full Name" placeholder="Masukkan email Anda" type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} isRequired required />
+          <Input label="Full Name" placeholder="Masukkan nama lengkap Anda" type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} isRequired required />
           <Input label="Email" placeholder="Masukkan email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} isRequired required />
           <Input label="Password" placeholder="Masukkan password Anda" type="password" value={password} onChange={(e) => setPassword(e.target.value)} isRequired required />
           <Button type="submit" className="w-full bg-blue-600 text-white rounded-full py-3 font-bold hover:bg-blue-700">

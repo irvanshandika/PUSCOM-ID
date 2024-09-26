@@ -1,20 +1,20 @@
 import React from "react";
+import UserDashboard from "./main";
 import Sidebar from "@/src/components/Sidebar";
-import ManageProducts from "./main";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Manajemen Produk",
+  title: "Manajemen Users",
 };
 
-function AddProductPage() {
+function Users() {
   return (
     <>
       <Sidebar>
-        <ManageProducts />
+        <UserDashboard />
       </Sidebar>
     </>
   );
 }
 
-export default AddProductPage;
+export default Users;

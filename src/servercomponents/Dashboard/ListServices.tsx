@@ -14,7 +14,8 @@ type ServiceItem = {
   name: string;
   email: string;
   phone: string;
-  type: string;
+  perangkat: string;
+  model: string;
   brand: string;
   damage: string;
   status: "Pending" | "In Progress" | "Completed" | "Rejected";
@@ -93,7 +94,8 @@ export default function ServiceListPage() {
     (item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.perangkat.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.brand.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -176,8 +178,9 @@ export default function ServiceListPage() {
             <TableHeader>
               <TableColumn key="name">NAMA</TableColumn>
               <TableColumn key="phone">NOMOR HP</TableColumn>
-              <TableColumn key="type">TIPE PERANGKAT</TableColumn>
+              <TableColumn key="perangkat">TIPE PERANGKAT</TableColumn>
               <TableColumn key="brand">BRAND</TableColumn>
+              <TableColumn key="model">MODEL</TableColumn>
               <TableColumn key="damage">DESKRIPSI MASALAH</TableColumn>
               <TableColumn key="status">STATUS</TableColumn>
               <TableColumn key="imageUrl">GAMBAR</TableColumn>
@@ -198,7 +201,7 @@ export default function ServiceListPage() {
               <ModalHeader className="flex flex-col gap-1">Gambar Kerusakan</ModalHeader>
               <ModalBody>
                 <div className="flex justify-center items-center">
-                  <Image src={selectedImage || ""} alt="Kerusakan Laptop" width={500} height={300} />
+                  <Image src={selectedImage || ""} alt="Kerusakan Laptop" width={0} height={0} className="w-[30em] h-[30em]" />
                 </div>
               </ModalBody>
               <ModalFooter>

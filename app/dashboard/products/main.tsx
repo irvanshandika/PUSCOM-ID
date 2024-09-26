@@ -8,7 +8,7 @@ import { Spinner } from "@nextui-org/spinner";
 import ProductDashboard from "@/src/servercomponents/Dashboard/Products";
 import { doc, getDoc } from "firebase/firestore";
 
-function ProductDashboardPage() {
+function ManageProducts() {
   const [user, loading, error] = useAuthState(auth);
   const [isAdmin, setIsAdmin] = useState(false);
   const [checkingRole, setCheckingRole] = useState(true);
@@ -61,4 +61,4 @@ function ProductDashboardPage() {
   );
 }
 
-export default ProductDashboardPage;
+export default ManageProducts;

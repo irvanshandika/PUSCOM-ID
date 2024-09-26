@@ -6,8 +6,7 @@ import { Mail, Phone, MapPin, Send, LogIn } from "lucide-react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { collection, addDoc, doc, getDoc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage, auth } from "@/src/config/FirebaseConfig";
+import { db, auth } from "@/src/config/FirebaseConfig";
 import { toast } from "react-hot-toast";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
@@ -22,11 +21,10 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [photoURL, setPhotoURL] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [currentDate, setCurrentDate] = useState(""); // State for current date
+  const [currentDate, setCurrentDate] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    // Get current date and format it as "Tanggal/Bulan/Tahun"
     const today = new Date();
     const formattedDate = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
     setCurrentDate(formattedDate);
@@ -59,14 +57,6 @@ export default function ContactPage() {
     setIsSubmitting(true);
 
     try {
-      // Fungsi untuk mengunggah gambar ke Firebase Storage
-      // const uploadImage = async (file: File) => {
-      //   const storageRef = ref(storage, `contact_images/${file.name}`);
-      //   await uploadBytes(storageRef, file);
-      //   return getDownloadURL(storageRef);
-      // };
-
-      // Fungsi untuk memproses konten Quill
       const processQuillContent = async (content: string) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(content, "text/html");
@@ -109,7 +99,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4">
       <h1 className="text-4xl font-bold text-center mb-8">Hubungi Kami</h1>
       <p className="text-center mb-4">Tanggal: {currentDate}</p> {/* Display the current date */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
