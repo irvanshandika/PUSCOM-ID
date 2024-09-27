@@ -134,30 +134,33 @@ export default function AIChatModal() {
             </div>
             <div className="space-y-4 mb-4">
               {messages.map((message, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className={`p-2 rounded-lg ${message.isUser ? "bg-primary text-white ml-auto" : "bg-gray-200 mr-auto"} max-w-[80%]`}>
-                  {message.isUser ? (
-                    <>
-                      <span className="shrink-0 inline-flex items-center justify-center size-[38px] rounded-full bg-gray-600">
-                        <span className="text-sm font-medium text-white leading-none">AZ</span>
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <svg className="shrink-0 size-[38px] rounded-full" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="38" height="38" rx="6" fill="#2563EB" />
-                        <path d="M10 28V18.64C10 13.8683 14.0294 10 19 10C23.9706 10 28 13.8683 28 18.64C28 23.4117 23.9706 27.28 19 27.28H18.25" stroke="white" strokeWidth="1.5" />
-                        <path d="M13 28V18.7552C13 15.5104 15.6863 12.88 19 12.88C22.3137 12.88 25 15.5104 25 18.7552C25 22 22.3137 24.6304 19 24.6304H18.25" stroke="white" strokeWidth="1.5" />
-                        <ellipse cx="19" cy="18.6554" rx="3.75" ry="3.6" fill="white" />
-                      </svg>
-                    </>
-                  )}
-                  <div dangerouslySetInnerHTML={{ __html: md.render(message.text) }} />
-                </motion.div>
+                <div key={index}>
+                  <div className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}>
+                    <div className={`flex items-center gap-2 ${message.isUser ? "flex-row-reverse" : ""}`}>
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full ${message.isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}>
+                        {message.isUser ? (
+                          <>
+                            <span className="shrink-0 inline-flex items-center justify-center size-[38px] rounded-full bg-gray-600">
+                              <span className="text-sm font-medium text-white leading-none">AZ</span>
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="shrink-0 size-[38px] rounded-full" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect width="38" height="38" rx="6" fill="#2563EB" />
+                              <path d="M10 28V18.64C10 13.8683 14.0294 10 19 10C23.9706 10 28 13.8683 28 18.64C28 23.4117 23.9706 27.28 19 27.28H18.25" stroke="white" strokeWidth="1.5" />
+                              <path d="M13 28V18.7552C13 15.5104 15.6863 12.88 19 12.88C22.3137 12.88 25 15.5104 25 18.7552C25 22 22.3137 24.6304 19 24.6304H18.25" stroke="white" strokeWidth="1.5" />
+                              <ellipse cx="19" cy="18.6554" rx="3.75" ry="3.6" fill="white" />
+                            </svg>
+                          </>
+                        )}
+                      </div>
+                      <div className={`p-3 max-w-md ${message.isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"} rounded-lg`}>
+                        <div dangerouslySetInnerHTML={{ __html: md.render(message.text) }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
               {isLoading && (
                 <div className="flex justify-center">

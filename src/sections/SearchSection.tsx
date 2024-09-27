@@ -18,7 +18,7 @@ export default function HeroSection() {
   return (
     <>
       <section className="mb-16">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <form onSubmit={handleSearch}>
               <Input

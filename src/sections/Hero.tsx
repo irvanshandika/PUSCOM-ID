@@ -14,7 +14,7 @@ export default function HeroSection() {
         <Button color="primary" onClick={() => router.push("/catalog")} size="lg" endContent={<ChevronRight />}>
           Jelajahi Produk
         </Button>
-        <Button variant="bordered" size="lg">
+        <Button variant="bordered" size="lg" onClick={() => router.push("https://wa.me/+6281234567890")}>
           Konsultasi Gratis
         </Button>
       </div>

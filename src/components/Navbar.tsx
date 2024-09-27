@@ -68,7 +68,11 @@ export default function TechHubNavbar() {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {menuItems.map((item, index) => (
           <NavbarItem key={`${item}-${index}`}>
-            <Link color="foreground" className={`font-medium focus:outline-none ${isActive(`${item.href}`) ? "underline underline-offset-4 decoration-blue-500 decoration-solid" : "text-inherit hover:text-gray-400"}`} href={item.href}>
+            <Link
+              color="foreground"
+              className={`font-medium focus:outline-none ${isActive(`${item.href}`) ? "underline underline-offset-4 decoration-blue-500 decoration-solid" : "text-inherit hover:text-gray-400"}`}
+              href={item.href}
+              aria-label={`${item.label}`}>
               {item.label}
             </Link>
           </NavbarItem>
@@ -90,7 +94,12 @@ export default function TechHubNavbar() {
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
-            <Link color="foreground" className={`font-medium focus:outline-none w-full ${isActive(`${item.href}`) ? "underline underline-offset-4 decoration-blue-500 decoration-solid" : "text-inherit hover:text-gray-400"}`} href={item.href} size="lg">
+            <Link
+              color="foreground"
+              className={`font-medium focus:outline-none w-full ${isActive(`${item.href}`) ? "underline underline-offset-4 decoration-blue-500 decoration-solid" : "text-inherit hover:text-gray-400"}`}
+              href={item.href}
+              size="lg"
+              aria-label={`${item.label}`}>
               {item.label}
             </Link>
           </NavbarMenuItem>
