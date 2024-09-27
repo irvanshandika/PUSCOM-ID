@@ -46,7 +46,7 @@ export default function ContactMessageDetail() {
   // Update page title with "{Nama}'s Mail"
   useEffect(() => {
     if (message) {
-      document.title = `${message.name}'s Mail`;
+      document.title = `${message.name}'s Mail | PUSCOM`;
     }
   }, [message]);
 

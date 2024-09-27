@@ -6,6 +6,7 @@ import ServisForm from "@/src/servercomponents/Servis/ServisForm";
 import { useRouter } from "next/navigation";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { app } from "@/src/config/FirebaseConfig";
+import Image from "next/image";
 
 function ServisPage() {
   const [loadingAuth, setLoadingAuth] = useState(true);
@@ -38,14 +39,21 @@ function ServisPage() {
   if (!user) {
     // If user is not authenticated, show sign-in prompt
     return (
-      <div className="flex flex-col items-center justify-center py-[18vh] px-4 sm:px-8">
-        <h2 className="text-2xl font-semibold mb-4 text-center max-w-xl">
-          Anda harus masuk terlebih dahulu untuk mengakses halaman ini demi keamanan data Anda.
-        </h2>
-        <Button onPress={() => router.push("/auth/signin")} color="primary" className="w-full sm:w-auto">
-          Masuk
-        </Button>
-      </div>
+      <>
+        <div className="flex flex-col items-center justify-center px-4 sm:px-8">
+          <Image
+            src="https://cdn3d.iconscout.com/3d/premium/thumb/403-forbidden-error-3d-icon-download-in-png-blend-fbx-gltf-file-formats--status-code-http-response-pack-seo-web-icons-5073043.png?f=webp"
+            width={0}
+            height={0}
+            alt="Login"
+            className="w-[300px]"
+          />
+          <h2 className="text-2xl font-semibold mb-4 text-center max-w-xl">Anda harus masuk terlebih dahulu untuk mengakses halaman ini demi keamanan data Anda.</h2>
+          <Button onPress={() => router.push("/auth/signin")} color="primary" className="w-full sm:w-auto">
+            Masuk
+          </Button>
+        </div>
+      </>
     );
   }
 
