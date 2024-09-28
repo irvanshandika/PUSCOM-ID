@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { Input } from "@nextui-org/react";
-import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
@@ -17,25 +15,13 @@ export default function HeroSection() {
 
   return (
     <>
-      <section className="mb-16">
-        <div className="max-w-5xl mx-auto">
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <form onSubmit={handleSearch}>
-              <Input
-                isClearable
-                radius="lg"
-                classNames={{
-                  input: "text-small",
-                  inputWrapper: "h-12",
-                }}
-                placeholder="Cari produk..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                startContent={<Search className="text-gray-400" />}
-              />
-            </form>
-          </div>
-        </div>
+      <section>
+        <form onSubmit={handleSearch} className="bg-white mt-12 flex px-1 py-1.5 rounded-full shadow-md border overflow-hidden">
+          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari Produk..." className="w-full text-gray-800 outline-none pl-4 text-sm" />
+          <button type="button" className="bg-blue-600 hover:bg-blue-700 px-5 py-2.5 transition-all text-white tracking-wide text-sm rounded-full">
+            Search
+          </button>
+        </form>
       </section>
     </>
   );

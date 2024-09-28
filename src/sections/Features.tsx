@@ -27,9 +27,9 @@ export default function FeaturesSection() {
       <div className="flex justify-center">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((item, index) => (
-            <Card key={index} className="hover:shadow-md transition-shadow">
-              <CardHeader>
-                <Image src={item.img} alt={item.title} className="w-40 h-w-40 mx-auto" width={0} height={0} />
+            <Card key={index} className="hover:shadow-md transition-shadow px-[-20px]">
+              <CardHeader className="flex justify-center">
+                <Image src={item.img} alt={item.title} className="w-40 h-w-40" width={0} height={0} />
               </CardHeader>
               <CardBody className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{item.title}</h3>

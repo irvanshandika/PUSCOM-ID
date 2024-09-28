@@ -13,7 +13,7 @@ function Catalog() {
     <>
       <div className="bg-gray-50">
         <Navbar />
-        <main className="container mx-auto px-4 py-12">
+        <main>
           <ProductCatalog />
         </main>
         <Footer />

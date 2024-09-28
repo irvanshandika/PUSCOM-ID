@@ -143,11 +143,11 @@ export default function ServisForm() {
             <p className="mt-2 text-sm text-gray-600">Laptop Service Request Form</p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              <Input type="text" placeholder="Masukkan nama lengkap Anda" variant="bordered" labelPlacement="outside" fullWidth value={name} onChange={(e) => setName(e.target.value)} isRequired required />
-              <Input type="email" placeholder="Masukkan alamat email Anda" variant="bordered" labelPlacement="outside" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} isRequired required />
-              <Input type="tel" placeholder="Masukkan nomor HP Anda" variant="bordered" labelPlacement="outside" fullWidth value={phone} onChange={(e) => setPhone(e.target.value)} isRequired required />
-              <Select placeholder="Pilih brand laptop Anda" variant="bordered" labelPlacement="outside" value={brand} onChange={(e) => setBrand(e.target.value)} isRequired required>
+            <div className="space-y-8">
+              <Input type="text" label="Nama Lengkap:" placeholder="Masukkan nama lengkap Anda" variant="bordered" labelPlacement="outside" fullWidth value={name} onChange={(e) => setName(e.target.value)} isRequired required />
+              <Input type="email" label="Email:" placeholder="Masukkan alamat email Anda" variant="bordered" labelPlacement="outside" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} isRequired required />
+              <Input type="tel" label="No. Handphone:" placeholder="Masukkan nomor HP Anda" variant="bordered" labelPlacement="outside" fullWidth value={phone} onChange={(e) => setPhone(e.target.value)} isRequired required />
+              <Select placeholder="Pilih brand laptop Anda" label="Pilih Brand:" variant="bordered" labelPlacement="outside" value={brand} onChange={(e) => setBrand(e.target.value)} isRequired required>
                 <SelectItem key="asus" value="Asus">
                   Asus
                 </SelectItem>
@@ -163,20 +163,26 @@ export default function ServisForm() {
                 <SelectItem key="lenovo" value="Lenovo">
                   Lenovo
                 </SelectItem>
-                <SelectItem key="other" value="Other">
-                  Lainnya
+                <SelectItem key="msi" value="MSI">
+                  MSI
+                </SelectItem>
+                <SelectItem key="apple" value="Apple">
+                  Apple
+                </SelectItem>
+                <SelectItem key="others" value="Others">
+                  Others
                 </SelectItem>
               </Select>
-              <Input type="text" placeholder="Masukkan model laptop Anda" variant="bordered" labelPlacement="outside" fullWidth value={model} onChange={(e) => setModel(e.target.value)} required />
+              <Input type="text" label="Model:" placeholder="Masukkan model laptop Anda" variant="bordered" labelPlacement="outside" fullWidth value={model} onChange={(e) => setModel(e.target.value)} required isRequired />
               <RadioGroup label="Jenis Perangkat" value={perangkat} onChange={(e) => setPerangkat(e.target.value)} isRequired>
-                <Radio value="Komputer">Komputer</Radio>
+                <Radio value="Desktop">Desktop</Radio>
                 <Radio value="Laptop">Laptop</Radio>
               </RadioGroup>
-              <DateInput label="Pilih tanggal servis" variant="bordered" labelPlacement="outside" value={tanggal ? parseDate(tanggal) : null} onChange={(date) => setTanggal(date?.toString() || "")} isRequired />
-              <Textarea placeholder="Jelaskan kerusakan yang dialami laptop Anda" variant="bordered" labelPlacement="outside" minRows={3} value={damage} onChange={(e) => setDamage(e.target.value)} isRequired required />
+              <DateInput label="Pilih Tanggal Servis:" variant="bordered" labelPlacement="outside" value={tanggal ? parseDate(tanggal) : null} onChange={(date) => setTanggal(date?.toString() || "")} isRequired />
+              <Textarea placeholder="Jelaskan kerusakan yang dialami laptop Anda" label="Kerusakan:" variant="bordered" labelPlacement="outside" minRows={3} value={damage} onChange={(e) => setDamage(e.target.value)} isRequired required />
               <div>
                 <label htmlFor="laptop-image" className="block text-sm font-medium text-gray-700 mb-2">
-                  Upload Gambar Laptop
+                  Upload Gambar Laptop <span className="text-red-400">*</span>
                 </label>
                 <div className="flex items-center space-x-2">
                   <Button as="label" htmlFor="laptop-image" variant="bordered" startContent={<Upload className="h-4 w-4" />}>

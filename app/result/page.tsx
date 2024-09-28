@@ -6,9 +6,9 @@ import Footer from "@/src/components/Footer";
 function Result() {
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white">
+      <div className="bg-gray-50">
         <Navbar />
-        <main className="container mx-auto px-4 py-12">
+        <main>
           <Suspense>
             <ResultPage />
           </Suspense>

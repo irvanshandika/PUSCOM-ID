@@ -40,7 +40,7 @@ function ServisPage() {
     // If user is not authenticated, show sign-in prompt
     return (
       <>
-        <div className="flex flex-col items-center justify-center px-4 sm:px-8">
+        <div className="flex flex-col items-center justify-center py-4 sm:px-8">
           <Image
             src="https://cdn3d.iconscout.com/3d/premium/thumb/403-forbidden-error-3d-icon-download-in-png-blend-fbx-gltf-file-formats--status-code-http-response-pack-seo-web-icons-5073043.png?f=webp"
             width={0}
