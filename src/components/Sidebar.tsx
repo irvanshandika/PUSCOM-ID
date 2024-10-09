@@ -4,12 +4,13 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { getAuth, signOut } from "firebase/auth";
-import { app } from "@/src/config/FirebaseConfig";
 import { toast } from "react-hot-toast";
 import { useRouter, usePathname } from "next/navigation";
 import ExitIcon from "./icons/ExitIcon";
 import UserIcon from "./icons/UserIcon";
+import HomeIcon from "./icons/HomeIcon";
 import { Package2, Cog, UserPlus2, MailSearchIcon } from "lucide-react";
+import { app } from "@/src/config/FirebaseConfig";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -44,7 +45,15 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             <div className="max-w-xs relative bg-white border border-gray-200 rounded-xl shadow-lg dark:bg-neutral-800 dark:border-neutral-700" role="alert" aria-labelledby="hs-toast-avatar-label">
               <div className="flex p-4">
                 <div className="shrink-0">
-                  {user && user.photoURL ? <Image src={user.photoURL} className="size-8 text-large" width={0} height={0} alt={user?.displayName} /> : <UserIcon className="w-8 h-8" />}
+                  {user && user.photoURL ? (
+                    <>
+                      <Image src={user.photoURL} className="size-8 text-large" width={0} height={0} alt={user?.displayName} />
+                    </>
+                  ) : (
+                    <>
+                      <UserIcon className="w-8 h-8" />
+                    </>
+                  )}
                   <button
                     type="button"
                     onClick={() => toast.dismiss(t.id)}
@@ -103,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                   aria-haspopup="menu"
                   aria-expanded="false"
                   aria-label="Dropdown">
-                  <Image className="shrink-0 size-[38px] rounded-full" src={user?.photoURL} alt={user?.displayName} width={0} height={0} />
+                  <Image className="shrink-0 size-[38px] rounded-full" src={user?.photoURL ?? "https://i.pravatar.cc/150?u=a042581f4e29026024d"} alt={user?.displayName ?? "John Doe"} width={0} height={0} />
                 </button>
 
                 <div
@@ -116,6 +125,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     <p className="text-sm font-medium text-gray-800 dark:text-neutral-200">{user?.email}</p>
                   </div>
                   <div className="p-1.5 space-y-0.5">
+                    <button
+                      className="flex items-center w-full gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
+                      onClick={() => router.push("/")}>
+                      <HomeIcon className="w-5 h-5" />
+                      Home
+                    </button>
                     <button
                       className="flex items-center w-full gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700 dark:focus:text-neutral-300"
                       onClick={handleLogout}>

@@ -54,7 +54,6 @@ const UserManagement = () => {
   };
 
   const handleAddUser = (newUser: UserData) => {
-    setUsers([...users, newUser]);
     setIsAddModalOpen(false);
     toast.success("Pengguna baru berhasil ditambahkan.");
   };

@@ -12,7 +12,7 @@ export default function Error404Page() {
       <p className="text-xl text-gray-600 mb-8 text-center max-w-md">Maaf, halaman yang Anda cari tidak dapat ditemukan atau telah dipindahkan.</p>
       <div className="w-full max-w-md mb-8">
         <form onSubmit={(e) => e.preventDefault()} className="flex gap-2">
-          <Input placeholder="Cari di TechGenius..." startContent={<Search className="text-gray-400" />} className="flex-grow" />
+          <Input placeholder="Cari di PUSCOM..." startContent={<Search className="text-gray-400" />} className="flex-grow" />
           <Button color="primary" type="submit">
             Cari
           </Button>

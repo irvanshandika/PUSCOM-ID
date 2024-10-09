@@ -2,12 +2,10 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Input, Button, Avatar } from "@nextui-org/react";
+import { Input, Button } from "@nextui-org/react";
 import { useSignInStore } from "@/src/store/signInStore";
 import { GoogleIcon } from "@/src/components/icons/GoogleIcon";
-import { toast } from "react-hot-toast";
 import Link from "next/link";
-import UserIcon from "@/src/components/icons/UserIcon";
 
 const SignInPage: React.FC = () => {
   const router = useRouter();

@@ -29,6 +29,10 @@ const Navbar = () => {
       href: "/service",
     },
     {
+      label: "Jual",
+      href: "/jual",
+    },
+    {
       label: "Kontak",
       href: "/contact",
     },
