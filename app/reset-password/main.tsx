@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from "react";
 import { Card, CardHeader, CardBody, CardFooter, Input, Button, Link } from "@nextui-org/react";
@@ -57,7 +58,17 @@ export default function ResetPasswordPage() {
         </CardHeader>
         <CardBody>
           <form onSubmit={handleResetPassword} className="space-y-4">
-            <Input label="Email" placeholder="Masukkan alamat email Anda" type="email" value={email} onChange={(e) => setEmail(e.target.value)} startContent={<Mail className="text-default-400" size={20} />} autoComplete="email" isRequired required />
+            <Input
+              label="Email"
+              placeholder="Masukkan alamat email Anda"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              startContent={<Mail className="text-default-400" size={20} />}
+              autoComplete="email"
+              isRequired
+              required
+            />
             {error && <p className="text-danger text-small">{error}</p>}
             <Button type="submit" color="primary" className="w-full" isLoading={isLoading}>
               Kirim Link Reset Password
