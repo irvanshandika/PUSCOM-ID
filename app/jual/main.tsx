@@ -105,10 +105,11 @@ export default function SellForm() {
         <CardBody>
           <h1 className="text-2xl font-bold mb-6 text-center">Jual Laptop/Komputer</h1>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <Input label="Nama" value={name} onChange={(e) => setName(e.target.value)} required />
-            <Input label="Nomor Telepon" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+            <Input label="Nama" value={name} onChange={(e) => setName(e.target.value)} required isRequired />
+            <Input label="Nomor Telepon" value={phone} onChange={(e) => setPhone(e.target.value)} required isRequired />
             <Select
               label="Jenis Perangkat"
+              isRequired
               value={deviceType}
               onChange={(e) => {
                 setDeviceType(e.target.value);
@@ -122,7 +123,7 @@ export default function SellForm() {
                 Komputer
               </SelectItem>
             </Select>
-            <Select label={deviceType === "Laptop" ? "Brand" : "Tipe Komputer"} value={brand} onChange={(e) => setBrand(e.target.value)} required>
+            <Select label={deviceType === "Laptop" ? "Brand" : "Tipe Komputer"} value={brand} onChange={(e) => setBrand(e.target.value)} required isRequired>
               {deviceType === "Laptop"
                 ? brands.map((b) => (
                     <SelectItem key={b} value={b}>
@@ -135,15 +136,20 @@ export default function SellForm() {
                     </SelectItem>
                   ))}
             </Select>
-            {deviceType === "Laptop" && <Input label="Model Laptop" value={model} onChange={(e) => setModel(e.target.value)} required />}
+            {deviceType === "Laptop" && <Input label="Model Laptop" value={model} onChange={(e) => setModel(e.target.value)} required isRequired />}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Spesifikasi</label>
-              <ReactQuill theme="snow" value={specs} onChange={setSpecs} className="bg-white rounded-lg" />
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Spesifikasi <span className="text-red-500">*</span>
+              </label>
+              <ReactQuill theme="snow" value={specs} onChange={setSpecs} className="bg-white rounded-lg h-48 mb-12" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Gambar Perangkat</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Gambar Perangkat <span className="text-red-500">*</span>
+              </label>
               <input
                 type="file"
+                required
                 accept="image/*"
                 onChange={handleImageChange}
                 ref={fileInputRef}
