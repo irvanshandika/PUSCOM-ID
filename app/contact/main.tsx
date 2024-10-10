@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState, useEffect } from "react";
-import { Card, CardBody, Input, Button, Divider, Avatar, Tooltip } from "@nextui-org/react";
+import { Card, CardBody, Input, Button, Divider, Avatar } from "@nextui-org/react";
 import { Mail, Phone, MapPin, Send, LogIn, Clock, Calendar } from "lucide-react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
@@ -185,9 +185,9 @@ export default function ContactPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Kirim Pesan</h2>
               {isLoggedIn ? (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="flex items-center space-x-4 mb-6">
-                    <Avatar src={photoURL} alt={name} className="w-16 h-16" />
-                    <div>
+                  <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+                    <Avatar src={photoURL} alt={name} className="w-20 h-20 text-large" />
+                    <div className="text-center sm:text-left">
                       <p className="text-lg font-semibold text-gray-900">{name}</p>
                       <p className="text-gray-600">{email}</p>
                     </div>
