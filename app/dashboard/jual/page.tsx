@@ -1,20 +1,20 @@
 import React from "react";
+import JualPage from "./main";
 import Sidebar from "@/src/components/Sidebar";
-import DashboardPage from "./main";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
+  title: "Jual Laptop & Komputer",
 };
 
-function Dashboard() {
+function Jual() {
   return (
     <>
       <Sidebar>
-        <DashboardPage />
+        <JualPage />
       </Sidebar>
     </>
   );
 }
 
-export default Dashboard;
+export default Jual;

@@ -9,7 +9,7 @@ import { useRouter, usePathname } from "next/navigation";
 import ExitIcon from "./icons/ExitIcon";
 import UserIcon from "./icons/UserIcon";
 import HomeIcon from "./icons/HomeIcon";
-import { Package2, Cog, UserPlus2, MailSearchIcon } from "lucide-react";
+import { Package2, Cog, UserPlus2, MailSearchIcon, ComputerIcon } from "lucide-react";
 import { app } from "@/src/config/FirebaseConfig";
 
 interface SidebarProps {
@@ -227,6 +227,16 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
                     href="/dashboard/products">
                     <Package2 className="w-5 h-5" />
                     Produk
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm rounded-lg focus:outline-none ${
+                      isActive("/dashboard/jual") ? "bg-gray-900 text-white hover:bg-gray-500" : "text-gray-800 dark:text-neutral-400"
+                    } hover:bg-gray-100 dark:hover:bg-neutral-700`}
+                    href="/dashboard/jual">
+                    <ComputerIcon className="w-5 h-5" />
+                    Jual
                   </a>
                 </li>
                 <li>
