@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState, useEffect } from "react";
-import { Card, CardBody, Input, Button, Divider, Avatar } from "@nextui-org/react";
+import { Card, CardBody, Input, Button, Divider, Avatar, Tooltip } from "@nextui-org/react";
 import { Mail, Phone, MapPin, Send, LogIn, Clock, Calendar } from "lucide-react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
@@ -10,8 +10,6 @@ import { db, auth } from "@/src/config/FirebaseConfig";
 import { toast } from "react-hot-toast";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { GoogleReCaptchaProvider, useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import token from "markdown-it/lib/token.mjs";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -24,8 +22,6 @@ export default function ContactPage() {
   const [photoURL, setPhotoURL] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
-  const { executeRecaptcha } = useGoogleReCaptcha();
-
   const router = useRouter();
 
   useEffect(() => {
@@ -60,19 +56,6 @@ export default function ContactPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Jalankan reCAPTCHA sebelum pengiriman data
-    if (!executeRecaptcha) {
-      toast.error("Recaptcha tidak tersedia");
-      return;
-    }
-
-    // Dapatkan token reCAPTCHA
-    const token = await executeRecaptcha("sell_form");
-    if (!token) {
-      toast.error("Validasi Recaptcha gagal");
-      return;
-    }
-
     try {
       const processQuillContent = async (content: string) => {
         const parser = new DOMParser();
@@ -90,14 +73,33 @@ export default function ContactPage() {
         message: processedMessage,
         photoURL,
         createdAt: new Date(),
-        recaptchaToken: token,
       });
 
-      toast.success("Pesan berhasil dikirim!");
+      toast.success("Pesan berhasil dikirim!", {
+        icon: "✅",
+        position: "top-right",
+        duration: 3000,
+        style: {
+          background: "#333",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "16px",
+        },
+      });
       setSubject("");
       setMessage("");
     } catch (error) {
-      toast.error("Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.");
+      toast.error("Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.", {
+        icon: "❌",
+        position: "top-right",
+        duration: 3000,
+        style: {
+          background: "#333",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "16px",
+        },
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -114,128 +116,126 @@ export default function ContactPage() {
   };
 
   return (
-    <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ""}>
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">Hubungi Kami</h1>
-            <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">Kami siap membantu Anda. Jangan ragu untuk menghubungi kami kapan saja.</p>
-            <div className="mt-4 flex justify-center items-center text-sm text-gray-600">
-              <Calendar className="w-4 h-4 mr-2" />
-              <span>{currentDate}</span>
-            </div>
-          </div>
-
-          <div className="mt-12 grid gap-8 lg:grid-cols-2">
-            <Card className="bg-white shadow-xl">
-              <CardBody className="p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Informasi Kontak</h2>
-                <div className="space-y-6">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
-                        <Mail className="h-6 w-6" />
-                      </div>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-lg font-medium text-gray-900">Email</p>
-                      <p className="mt-1 text-gray-500">info@puscom.id</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white">
-                        <Phone className="h-6 w-6" />
-                      </div>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-lg font-medium text-gray-900">Telepon</p>
-                      <p className="mt-1 text-gray-500">(021) 123-4567</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <div className="flex items-center justify-center h-12 w-12 rounded-md bg-yellow-500 text-white">
-                        <MapPin className="h-6 w-6" />
-                      </div>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-lg font-medium text-gray-900">Alamat</p>
-                      <p className="mt-1 text-gray-500">Jl. Timoho No. 129, Demangan, Gondokusuman, D.I Yogyakarta</p>
-                    </div>
-                  </div>
-                </div>
-
-                <Divider className="my-8" />
-
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Jam Operasional</h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-center">
-                    <Clock className="w-5 h-5 mr-2 text-blue-500" />
-                    <span>Senin - Jumat: 09:00 - 18:00</span>
-                  </li>
-                  <li className="flex items-center">
-                    <Clock className="w-5 h-5 mr-2 text-blue-500" />
-                    <span>Sabtu: 10:00 - 15:00</span>
-                  </li>
-                  <li className="flex items-center">
-                    <Clock className="w-5 h-5 mr-2 text-blue-500" />
-                    <span>Minggu & Hari Libur: Tutup</span>
-                  </li>
-                </ul>
-
-                <Divider className="my-8" />
-
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Lokasi Kami</h3>
-                <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.018597497584!2d110.3917018745541!3d-7.787852477282271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59dbbbc458a5%3A0x6307949df8d9f156!2sPusComp!5e0!3m2!1sen!2sid!4v1728467816636!5m2!1sen!2sid"
-                    width="600"
-                    height="450"
-                    style={{ border: "0" }}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-              </CardBody>
-            </Card>
-
-            <Card className="bg-white shadow-xl">
-              <CardBody className="p-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Kirim Pesan</h2>
-                {isLoggedIn ? (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
-                      <Avatar src={photoURL} alt={name} className="w-20 h-20 text-large" />
-                      <div className="text-center sm:text-left">
-                        <p className="text-lg font-semibold text-gray-900">{name}</p>
-                        <p className="text-gray-600">{email}</p>
-                      </div>
-                    </div>
-                    <Input label="Subjek" placeholder="Masukkan subjek pesan" value={subject} onChange={(e) => setSubject(e.target.value)} required className="max-w-full" />
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Pesan</label>
-                      <ReactQuill value={message} onChange={setMessage} modules={modules} formats={formats} className="h-48 mb-12" />
-                    </div>
-                    <Button color="primary" size="lg" isLoading={isSubmitting} type="submit" className="w-full">
-                      <Send className="w-5 h-5 mr-2" />
-                      Kirim Pesan
-                    </Button>
-                  </form>
-                ) : (
-                  <div className="text-center py-12">
-                    <Mail className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <p className="text-xl font-semibold text-gray-900 mb-4">Anda perlu login untuk mengirim pesan</p>
-                    <Button color="primary" size="lg" onPress={handleLogin} className="mt-4">
-                      <LogIn className="w-5 h-5 mr-2" />
-                      Login
-                    </Button>
-                  </div>
-                )}
-              </CardBody>
-            </Card>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">Hubungi Kami</h1>
+          <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">Kami siap membantu Anda. Jangan ragu untuk menghubungi kami kapan saja.</p>
+          <div className="mt-4 flex justify-center items-center text-sm text-gray-600">
+            <Calendar className="w-4 h-4 mr-2" />
+            <span>{currentDate}</span>
           </div>
         </div>
+
+        <div className="mt-12 grid gap-8 lg:grid-cols-2">
+          <Card className="bg-white shadow-xl">
+            <CardBody className="p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Informasi Kontak</h2>
+              <div className="space-y-6">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                      <Mail className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-lg font-medium text-gray-900">Email</p>
+                    <p className="mt-1 text-gray-500">info@puscom.id</p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white">
+                      <Phone className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-lg font-medium text-gray-900">Telepon</p>
+                    <p className="mt-1 text-gray-500">(021) 123-4567</p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-12 w-12 rounded-md bg-yellow-500 text-white">
+                      <MapPin className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-lg font-medium text-gray-900">Alamat</p>
+                    <p className="mt-1 text-gray-500">Jl. Timoho No. 129, Demangan, Gondokusuman, D.I Yogyakarta</p>
+                  </div>
+                </div>
+              </div>
+
+              <Divider className="my-8" />
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Jam Operasional</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li className="flex items-center">
+                  <Clock className="w-5 h-5 mr-2 text-blue-500" />
+                  <span>Senin - Jumat: 09:00 - 18:00</span>
+                </li>
+                <li className="flex items-center">
+                  <Clock className="w-5 h-5 mr-2 text-blue-500" />
+                  <span>Sabtu: 10:00 - 15:00</span>
+                </li>
+                <li className="flex items-center">
+                  <Clock className="w-5 h-5 mr-2 text-blue-500" />
+                  <span>Minggu & Hari Libur: Tutup</span>
+                </li>
+              </ul>
+
+              <Divider className="my-8" />
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Lokasi Kami</h3>
+              <div className="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.018597497584!2d110.3917018745541!3d-7.787852477282271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59dbbbc458a5%3A0x6307949df8d9f156!2sPusComp!5e0!3m2!1sen!2sid!4v1728467816636!5m2!1sen!2sid"
+                  width="600"
+                  height="450"
+                  style={{ border: "0" }}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"></iframe>
+              </div>
+            </CardBody>
+          </Card>
+
+          <Card className="bg-white shadow-xl">
+            <CardBody className="p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Kirim Pesan</h2>
+              {isLoggedIn ? (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="flex items-center space-x-4 mb-6">
+                    <Avatar src={photoURL} alt={name} className="w-16 h-16" />
+                    <div>
+                      <p className="text-lg font-semibold text-gray-900">{name}</p>
+                      <p className="text-gray-600">{email}</p>
+                    </div>
+                  </div>
+                  <Input label="Subjek" placeholder="Masukkan subjek pesan" value={subject} onChange={(e) => setSubject(e.target.value)} required className="max-w-full" />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Pesan</label>
+                    <ReactQuill value={message} onChange={setMessage} modules={modules} formats={formats} className="h-48 mb-12" />
+                  </div>
+                  <Button color="primary" size="lg" isLoading={isSubmitting} type="submit" className="w-full">
+                    <Send className="w-5 h-5 mr-2" />
+                    Kirim Pesan
+                  </Button>
+                </form>
+              ) : (
+                <div className="text-center py-12">
+                  <Mail className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <p className="text-xl font-semibold text-gray-900 mb-4">Anda perlu login untuk mengirim pesan</p>
+                  <Button color="primary" size="lg" onPress={handleLogin} className="mt-4">
+                    <LogIn className="w-5 h-5 mr-2" />
+                    Login
+                  </Button>
+                </div>
+              )}
+            </CardBody>
+          </Card>
+        </div>
       </div>
-    </GoogleReCaptchaProvider>
+    </div>
   );
 }

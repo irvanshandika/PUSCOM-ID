@@ -5,7 +5,7 @@ import { getStorage, ref, deleteObject } from "firebase/storage";
 import { db } from "@/src/config/FirebaseConfig";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Tooltip, Card, CardBody } from "@nextui-org/react";
 import { Eye, Trash2, AlertCircle } from "lucide-react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Image from "next/image";
 
 interface Device {
@@ -59,7 +59,16 @@ export default function Dashboard() {
     if (!selectedDevice) return;
 
     try {
-      toast.loading("Menghapus data...");
+      toast.loading("Menghapus data...", {
+        position: "top-right",
+        duration: 3000,
+        style: {
+          background: "#333",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "16px",
+        },
+      });
 
       await deleteDoc(doc(db, "jual_db", selectedDevice.id));
 
@@ -72,10 +81,28 @@ export default function Dashboard() {
       setDevices(devices.filter((d) => d.id !== selectedDevice.id));
 
       toast.dismiss();
-      toast.success("Data berhasil dihapus");
+      toast.success("Data berhasil dihapus", {
+        position: "top-right",
+        duration: 3000,
+        style: {
+          background: "#333",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "16px",
+        },
+      });
     } catch (error) {
       console.error("Error deleting device:", error);
-      toast.error("Terjadi kesalahan saat menghapus data");
+      toast.error("Terjadi kesalahan saat menghapus data", {
+        position: "top-right",
+        duration: 3000,
+        style: {
+          background: "#333",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "16px",
+        },
+      });
     }
 
     setIsDeleteModalOpen(false);
@@ -84,18 +111,6 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: "#333",
-            color: "#fff",
-            borderRadius: "8px",
-            padding: "16px",
-          },
-        }}
-      />
       <Card className="bg-white shadow-xl">
         <CardBody>
           <h1 className="text-3xl font-bold mb-6 text-black">Dashboard Penjualan Laptop/Komputer</h1>

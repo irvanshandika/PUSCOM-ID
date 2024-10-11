@@ -9,8 +9,6 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db } from "@/src/config/FirebaseConfig";
 import { Upload, Check, X, Info } from "lucide-react";
 import Image from "next/image";
-import { GoogleReCaptchaProvider, useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import token from "markdown-it/lib/token.mjs";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -28,37 +26,41 @@ export default function SellForm() {
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Jalankan reCAPTCHA sebelum pengiriman data
-    if (!executeRecaptcha) {
-      toast.error("Recaptcha tidak tersedia");
-      return;
-    }
-
-    // Dapatkan token reCAPTCHA
-    const token = await executeRecaptcha("sell_form");
-    if (!token) {
-      toast.error("Validasi Recaptcha gagal");
-      return;
-    }
-
-    // Setelah reCAPTCHA berhasil, lanjutkan ke modal konfirmasi
     onOpen();
   };
 
   const confirmSubmit = async () => {
     onClose();
     if (images.length === 0) {
-      toast.error("Pilih setidaknya satu gambar", { icon: "🖼️" });
+      toast.error("Pilih setidaknya satu gambar", {
+        icon: "🖼️",
+        position: "top-right",
+        duration: 3000,
+        style: {
+          background: "#333",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "16px",
+        },
+      });
       return;
     }
 
     try {
-      toast.loading("Mengunggah data...", { icon: "⏳" });
+      toast.loading("Mengunggah data...", {
+        icon: "⏳",
+        position: "top-right",
+        duration: 3000,
+        style: {
+          background: "#333",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "16px",
+        },
+      });
 
       const storage = getStorage();
       const imageUrls: string[] = [];
@@ -79,11 +81,20 @@ export default function SellForm() {
         specs,
         imageUrls,
         createdAt: new Date(),
-        recaptchaToken: token, // Simpan token reCAPTCHA di database
       });
 
       toast.dismiss();
-      toast.success("Data berhasil dikirim!", { icon: "✅" });
+      toast.success("Data berhasil dikirim!", {
+        icon: "✅",
+        position: "top-right",
+        duration: 3000,
+        style: {
+          background: "#333",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "16px",
+        },
+      });
 
       // Reset form
       setName("");
@@ -99,7 +110,17 @@ export default function SellForm() {
       }
     } catch (error) {
       console.error("Error adding document: ", error);
-      toast.error("Terjadi kesalahan. Silakan coba lagi.", { icon: "❌" });
+      toast.error("Terjadi kesalahan. Silakan coba lagi.", {
+        icon: "❌",
+        position: "top-right",
+        duration: 3000,
+        style: {
+          background: "#333",
+          color: "#fff",
+          borderRadius: "8px",
+          padding: "16px",
+        },
+      });
     }
   };
 
@@ -122,168 +143,166 @@ export default function SellForm() {
   };
 
   return (
-    <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? ""}>
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <Card className="p-6 shadow-xl bg-gradient-to-br from-blackto-white">
-          <CardBody>
-            <h1 className="text-3xl font-bold mb-8 text-center text-black">Jual Laptop/Komputer</h1>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <Input
-                label="Nama"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                isRequired
-                className="max-w-full"
-                classNames={{
-                  input: "bg-white",
-                }}
-              />
-              <Input
-                label="Nomor Telepon"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-                isRequired
-                className="max-w-full"
-                classNames={{
-                  input: "bg-white",
-                }}
-              />
-              <Select
-                label="Jenis Perangkat"
-                value={deviceType}
-                onChange={(e) => {
-                  setDeviceType(e.target.value);
-                  setBrand("");
-                }}
-                required
-                isRequired
-                className="max-w-full">
-                <SelectItem key="Laptop" value="Laptop">
-                  Laptop
-                </SelectItem>
-                <SelectItem key="Komputer" value="Komputer">
-                  Komputer
-                </SelectItem>
-              </Select>
-              {deviceType === "Laptop" ? (
-                <Select label="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} required isRequired className="max-w-full">
-                  {brands.map((b) => (
-                    <SelectItem key={b} value={b}>
-                      {b}
-                    </SelectItem>
-                  ))}
-                </Select>
-              ) : (
-                <Select label="Tipe Komputer" value={brand} onChange={(e) => setBrand(e.target.value)} required isRequired className="max-w-full">
-                  {computerTypes.map((t) => (
-                    <SelectItem key={t} value={t}>
-                      {t}
-                    </SelectItem>
-                  ))}
-                </Select>
-              )}
-              {deviceType === "Laptop" && (
-                <Input
-                  label="Model Laptop"
-                  value={model}
-                  onChange={(e) => setModel(e.target.value)}
-                  required
-                  isRequired
-                  className="max-w-full"
-                  classNames={{
-                    input: "bg-white",
-                  }}
-                />
-              )}
-              <div>
-                <label className="block text-sm font-medium text-black mb-2">
-                  Spesifikasi <span className="text-red-500">*</span>
-                </label>
-                <ReactQuill theme="snow" value={specs} onChange={setSpecs} className="bg-white rounded-lg h-28 lg:mb-16 mb-24" />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-black mb-2 flex items-center">
-                  Gambar Perangkat <span className="text-red-500 ml-1">*</span>
-                  <Tooltip content="Maksimal 20MB per gambar">
-                    <Info size={16} className="ml-2 text-black" />
-                  </Tooltip>
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  ref={fileInputRef}
-                  multiple
-                  className="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-blue-50 file:text-blue-700
-                hover:file:bg-blue-100
-                transition duration-300 ease-in-out"
-                  required
-                />
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                {previewUrls.map((url, index) => (
-                  <div key={index} className="relative group">
-                    <Image src={url} alt={`Preview ${index + 1}`} className="w-full h-32 object-cover rounded-lg transition duration-300 ease-in-out group-hover:opacity-75" width={128} height={128} />
-                    <button type="button" onClick={() => removeImage(index)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out">
-                      <X size={16} />
-                    </button>
-                  </div>
+    <div className="container mx-auto px-4 py-8 max-w-2xl">
+      <Card className="p-6 shadow-xl bg-gradient-to-br from-blue-50 to-white">
+        <CardBody>
+          <h1 className="text-3xl font-bold mb-8 text-center text-blue-600">Jual Laptop/Komputer</h1>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Input
+              label="Nama"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              isRequired
+              className="max-w-full"
+              classNames={{
+                input: "bg-white",
+              }}
+            />
+            <Input
+              label="Nomor Telepon"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              isRequired
+              className="max-w-full"
+              classNames={{
+                input: "bg-white",
+              }}
+            />
+            <Select
+              label="Jenis Perangkat"
+              value={deviceType}
+              onChange={(e) => {
+                setDeviceType(e.target.value);
+                setBrand("");
+              }}
+              required
+              isRequired
+              className="max-w-full">
+              <SelectItem key="Laptop" value="Laptop">
+                Laptop
+              </SelectItem>
+              <SelectItem key="Komputer" value="Komputer">
+                Komputer
+              </SelectItem>
+            </Select>
+            {deviceType === "Laptop" ? (
+              <Select label="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} required isRequired className="max-w-full">
+                {brands.map((b) => (
+                  <SelectItem key={b} value={b}>
+                    {b}
+                  </SelectItem>
                 ))}
-              </div>
-              <Button type="submit" color="primary" className="w-full transition duration-300 ease-in-out transform hover:scale-105">
-                <Upload className="w-4 h-4 mr-2" />
-                Kirim
-              </Button>
-            </form>
-          </CardBody>
-        </Card>
+              </Select>
+            ) : (
+              <Select label="Tipe Komputer" value={brand} onChange={(e) => setBrand(e.target.value)} required isRequired className="max-w-full">
+                {computerTypes.map((t) => (
+                  <SelectItem key={t} value={t}>
+                    {t}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
+            {deviceType === "Laptop" && (
+              <Input
+                label="Model Laptop"
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+                required
+                isRequired
+                className="max-w-full"
+                classNames={{
+                  input: "bg-white",
+                }}
+              />
+            )}
+            <div>
+              <label className="block text-sm font-medium text-blue-600 mb-2">
+                Spesifikasi <span className="text-red-500">*</span>
+              </label>
+              <ReactQuill theme="snow" value={specs} onChange={setSpecs} className="bg-white rounded-lg h-28 mb-16" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-blue-600 mb-2 flex items-center">
+                Gambar Perangkat <span className="text-red-500 ml-1">*</span>
+                <Tooltip content="Maksimal 20MB per gambar">
+                  <Info size={16} className="ml-2 text-blue-500" />
+                </Tooltip>
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                ref={fileInputRef}
+                multiple
+                className="block w-full text-sm text-gray-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-full file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-blue-50 file:text-blue-700
+                  hover:file:bg-blue-100
+                  transition duration-300 ease-in-out"
+                required
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              {previewUrls.map((url, index) => (
+                <div key={index} className="relative group">
+                  <Image src={url} alt={`Preview ${index + 1}`} className="w-full h-32 object-cover rounded-lg transition duration-300 ease-in-out group-hover:opacity-75" width={128} height={128} />
+                  <button type="button" onClick={() => removeImage(index)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out">
+                    <X size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <Button type="submit" color="primary" className="w-full transition duration-300 ease-in-out transform hover:scale-105">
+              <Upload className="w-4 h-4 mr-2" />
+              Kirim
+            </Button>
+          </form>
+        </CardBody>
+      </Card>
 
-        <Modal isOpen={isOpen} onClose={onClose} className="bg-white rounded-lg shadow-xl">
-          <ModalContent>
-            <ModalHeader className="flex flex-col gap-1 text-black">Konfirmasi Data</ModalHeader>
-            <ModalBody>
-              <p className="text-gray-600 mb-4">Apakah Anda yakin data yang dimasukkan sudah benar?</p>
-              <ul className="list-disc list-inside text-gray-700 space-y-2">
+      <Modal isOpen={isOpen} onClose={onClose} className="bg-white rounded-lg shadow-xl">
+        <ModalContent>
+          <ModalHeader className="flex flex-col gap-1 text-blue-600">Konfirmasi Data</ModalHeader>
+          <ModalBody>
+            <p className="text-gray-600 mb-4">Apakah Anda yakin data yang dimasukkan sudah benar?</p>
+            <ul className="list-disc list-inside text-gray-700 space-y-2">
+              <li>
+                Nama: <span className="font-semibold">{name}</span>
+              </li>
+              <li>
+                Nomor Telepon: <span className="font-semibold">{phone}</span>
+              </li>
+              <li>
+                Jenis Perangkat: <span className="font-semibold">{deviceType}</span>
+              </li>
+              <li>
+                {deviceType === "Laptop" ? "Brand" : "Tipe Komputer"}: <span className="font-semibold">{brand}</span>
+              </li>
+              {deviceType === "Laptop" && (
                 <li>
-                  Nama: <span className="font-semibold">{name}</span>
+                  Model: <span className="font-semibold">{model}</span>
                 </li>
-                <li>
-                  Nomor Telepon: <span className="font-semibold">{phone}</span>
-                </li>
-                <li>
-                  Jenis Perangkat: <span className="font-semibold">{deviceType}</span>
-                </li>
-                <li>
-                  {deviceType === "Laptop" ? "Brand" : "Tipe Komputer"}: <span className="font-semibold">{brand}</span>
-                </li>
-                {deviceType === "Laptop" && (
-                  <li>
-                    Model: <span className="font-semibold">{model}</span>
-                  </li>
-                )}
-                <li>
-                  Jumlah Gambar: <span className="font-semibold">{images.length}</span>
-                </li>
-              </ul>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose} className="transition duration-300 ease-in-out">
-                Batal
-              </Button>
-              <Button color="primary" onPress={confirmSubmit} className="transition duration-300 ease-in-out">
-                <Check className="w-4 h-4 mr-2" />
-                Konfirmasi
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </div>
-    </GoogleReCaptchaProvider>
+              )}
+              <li>
+                Jumlah Gambar: <span className="font-semibold">{images.length}</span>
+              </li>
+            </ul>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" variant="light" onPress={onClose} className="transition duration-300 ease-in-out">
+              Batal
+            </Button>
+            <Button color="primary" onPress={confirmSubmit} className="transition duration-300 ease-in-out">
+              <Check className="w-4 h-4 mr-2" />
+              Konfirmasi
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </div>
   );
 }
