@@ -19,7 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/ins2wgm.css" />
+      </head>
+      <body className="font-scandia">
         <PrelineScript />
         <Toaster position="top-right" reverseOrder={false} />
         <Providers>{children}</Providers>

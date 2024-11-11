@@ -80,7 +80,23 @@ export default function ProductDetail() {
   }
 
   if (!product) {
-    return <div className="text-center">Produk tidak ditemukan</div>;
+    return (
+      <>
+        <div className="flex flex-col items-center justify-center">
+          <Image
+            src="https://cdn3d.iconscout.com/3d/premium/thumb/404-3d-icon-download-in-png-blend-fbx-gltf-file-formats--error-page-not-found-work-service-website-pack-seo-web-icons-5804852.png?f=webp"
+            alt="Produk Tidak Ditemukan"
+            width={300}
+            height={300}
+          />
+          <h1 className="text-2xl font-bold mb-4">Produk Tidak Ditemukan</h1>
+          <p className="text-gray-600 mb-6">Maaf, produk yang Anda cari tidak tersedia.</p>
+          <Button color="primary" href="/" as="a">
+            Kembali ke Beranda
+          </Button>
+        </div>
+      </>
+    );
   }
 
   return (

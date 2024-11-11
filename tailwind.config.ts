@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { Config } from "tailwindcss";
 import {nextui} from "@nextui-org/react"
 
@@ -10,6 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        "scandia": ["scandia-web", "sans-serif"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -17,6 +21,9 @@ const config: Config = {
     },
   },
   darkMode: "class",
-  plugins: [nextui(), require('preline/plugin')],
+  plugins: [
+    nextui(), 
+    require('preline/plugin')
+  ],
 };
 export default config;

@@ -1,4 +1,3 @@
-// src/app/products/[id]/page.tsx
 import React from "react";
 import ProductDetail from "./main";
 import { Metadata } from "next";
@@ -14,7 +13,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   if (docSnap.exists()) {
     const productData = docSnap.data();
     return {
-      title: productData.name, // Set the title to product name
+      title: productData.name,
     };
   }
 
