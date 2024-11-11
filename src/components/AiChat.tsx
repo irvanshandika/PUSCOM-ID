@@ -1,12 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, Button, useDisclosure, Textarea, SelectItem, Select } from "@nextui-org/react";
 import { Bot, Send } from "lucide-react";
 import MarkdownIt from "markdown-it";
+import { app } from "@/src/config/FirebaseConfig";
+import { getAuth } from "firebase/auth";
+import UserIcon from "@/src/components/icons/UserIcon";
 import { startChat } from "@/src/utils/googleAI"; // Your Google Gemini AI setup
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 const LoadingDots = () => {
   return (
@@ -52,10 +57,24 @@ const promptOptions = [
 
 export default function AIChatModal() {
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([]);
+  const [user, setUser] = useState<any>(null);
+  const auth = getAuth();
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const chatStartedRef = useRef(false);
+
+  useEffect(() => {
+    const authInstance = getAuth(app);
+    const unsubscribe = authInstance.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (isOpen && !chatStartedRef.current) {
@@ -140,9 +159,13 @@ export default function AIChatModal() {
                       <div className={`flex items-center justify-center w-8 h-8 rounded-full ${message.isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}>
                         {message.isUser ? (
                           <>
-                            <span className="shrink-0 inline-flex items-center justify-center size-[38px] rounded-full bg-gray-600">
-                              <span className="text-sm font-medium text-white leading-none">AZ</span>
-                            </span>
+                            {user?.photoURL ? (
+                              <>
+                                <Image src={user.photoURL} className="w-8 h-8 rounded-full" alt={user.displayName} width={0} height={0} />
+                              </>
+                            ) : (
+                              <UserIcon />
+                            )}
                           </>
                         ) : (
                           <>
@@ -157,9 +180,21 @@ export default function AIChatModal() {
                           </>
                         )}
                       </div>
-                      <div className={`p-3 max-w-md ${message.isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"} rounded-lg`}>
-                        <div dangerouslySetInnerHTML={{ __html: md.render(message.text) }} />
-                      </div>
+                      {message.isUser ? (
+                        <>
+                          <div className={`p-3 max-w-md ${message.isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"} rounded-lg`}>
+                            <span className="font-semibold">{user?.displayName || "User"} </span>
+                            <div dangerouslySetInnerHTML={{ __html: md.render(message.text) }} />
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className={`p-3 max-w-md ${message.isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"} rounded-lg`}>
+                            <span className="font-semibold">Jackie AI</span>
+                            <div dangerouslySetInnerHTML={{ __html: md.render(message.text) }} />
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
