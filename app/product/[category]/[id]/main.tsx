@@ -7,6 +7,7 @@ import { ShoppingCart, Heart, Star, Truck, Shield, RotateCcw, ChevronDown, Chevr
 import { db } from "@/src/config/FirebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type Product = {
   id: string;
@@ -29,7 +30,8 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const { id } = useParams();
+  const params = useParams();
+  const router = useRouter();
 
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
@@ -38,11 +40,18 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const docRef = doc(db, "products", id as string);
+        const docRef = doc(db, "products", params.id as string);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
           const productData = docSnap.data() as Omit<Product, "id">;
+
+          // Validasi category
+          if (productData.category.toLowerCase() !== (params.category as string).toLowerCase()) {
+            router.push("/404");
+            return;
+          }
+
           setProduct({
             id: docSnap.id,
             ...productData,
@@ -51,6 +60,7 @@ export default function ProductDetail() {
           });
         } else {
           toast.error("Produk tidak ditemukan");
+          router.push("/404");
         }
       } catch (error) {
         console.error("Error fetching product: ", error);
@@ -61,7 +71,7 @@ export default function ProductDetail() {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [params.id, params.category, router]);
 
   const getShortDescription = (description: string) => {
     const words = description.split(" ");

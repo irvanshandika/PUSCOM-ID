@@ -124,7 +124,7 @@ export default function ProductCatalog() {
                 </Chip>
                 <p className="font-bold text-lg mb-2">Rp {formatPrice(product.price)}</p>
                 <p className="text-sm mb-2">Stok: {product.stock}</p>
-                <Button color="primary" endContent={<ShoppingCart className="h-4 w-4" />} onClick={() => router.push(`/product/${product.id}`)}>
+                <Button color="primary" endContent={<ShoppingCart className="h-4 w-4" />} onClick={() => router.push(`/product/${product.category}/${product.id}`)}>
                   Lihat Produk
                 </Button>
               </CardFooter>

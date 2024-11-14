@@ -6,7 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 import Navbar from "@/src/components/Navbar";
 import Footer from "@/src/components/Footer";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { category: string; id: string } }): Promise<Metadata> {
   const docRef = doc(db, "products", params.id);
   const docSnap = await getDoc(docRef);
 
@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     const productData = docSnap.data();
     return {
       title: productData.name,
+      description: `${productData.name} - ${params.category}`,
     };
   }
 
