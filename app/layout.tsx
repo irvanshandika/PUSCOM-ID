@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="stylesheet" href="https://use.typekit.net/ins2wgm.css" />
+        <link rel="preconnect" href="https://use.typekit.net/ins2wgm.css" />
       </head>
       <body className="font-scandia">
         <PrelineScript />
