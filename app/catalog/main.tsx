@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Card, CardBody, CardFooter, Image, Button, Pagination, Input, Select, SelectItem, Spinner, Chip } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, Button, Pagination, Input, Select, SelectItem, Spinner, Chip } from "@nextui-org/react";
+import Image from "next/image";
 import { Search, ShoppingCart } from "lucide-react";
 import { db } from "@/src/config/FirebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
@@ -115,7 +116,7 @@ export default function ProductCatalog() {
           {items.map((product) => (
             <Card key={product.id} className="w-full">
               <CardBody className="p-0 flex justify-center items-center">
-                <Image src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+                <Image src={product.image} alt={product.name} className="w-full h-48 object-cover" width={0} height={0} />
               </CardBody>
               <CardFooter className="flex flex-col items-start">
                 <h3 className="font-semibold text-lg mb-1">{product.name}</h3>

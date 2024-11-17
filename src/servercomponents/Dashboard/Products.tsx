@@ -45,7 +45,6 @@ type Product = {
   actions?: string;
 };
 
-// Fungsi untuk memformat harga
 const formatPrice = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
@@ -217,11 +216,11 @@ export default function ProductDashboard() {
         <p>Loading data...</p>
       ) : (
         <>
-          <Table
+            <Table
             aria-label="Tabel Produk"
             bottomContent={
               <div className="flex w-full justify-center">
-                <Pagination isCompact showControls showShadow color="primary" page={page} total={pages} onChange={(page) => setPage(page)} />
+              <Pagination isCompact showControls showShadow color="primary" page={page} total={pages} onChange={(page) => setPage(page)} />
               </div>
             }>
             <TableHeader>
@@ -231,8 +230,17 @@ export default function ProductDashboard() {
               <TableColumn key="stock">STOK</TableColumn>
               <TableColumn key="actions">AKSI</TableColumn>
             </TableHeader>
-            <TableBody items={items}>{(item) => <TableRow key={item.id}>{(columnKey) => <TableCell>{renderCell(item, columnKey as keyof Product)}</TableCell>}</TableRow>}</TableBody>
-          </Table>
+            <TableBody 
+              items={items}
+              emptyContent={"Tidak ada produk yang ditemukan."}
+            >
+              {(item) => (
+              <TableRow key={item.id}>
+                {(columnKey) => <TableCell>{renderCell(item, columnKey as keyof Product)}</TableCell>}
+              </TableRow>
+              )}
+            </TableBody>
+            </Table>
         </>
       )}
       {/* Modal untuk menambah produk */}

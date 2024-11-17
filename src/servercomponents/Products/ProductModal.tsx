@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Select, SelectItem, Textarea, Select, SelectItem } from "@nextui-org/react";
 import { useDropzone, FileRejection } from "react-dropzone";
 import { Upload } from "lucide-react";
 import Image from "next/image";
@@ -15,20 +15,20 @@ const productCategories = [
 ];
 
 export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const {
-    productName, category, price, stock, description, imagePreview, isSubmitting,
-    setProductName, setCategory, setPrice, setStock, setDescription, handleImageUpload, submitProduct
-  } = useProductStore();
+  const { productName, category, price, stock, description, imagePreview, isSubmitting, setProductName, setCategory, setPrice, setStock, setDescription, handleImageUpload, submitProduct } = useProductStore();
 
-  const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
-    if (fileRejections.length > 0) {
-      toast.error("Tipe file tidak diizinkan. Hanya format JPG, JPEG, PNG, atau GIF yang diperbolehkan.");
-      return;
-    }
+  const onDrop = useCallback(
+    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      if (fileRejections.length > 0) {
+        toast.error("Tipe file tidak diizinkan. Hanya format JPG, JPEG, PNG, atau GIF yang diperbolehkan.");
+        return;
+      }
 
-    const file = acceptedFiles[0];
-    handleImageUpload(file);
-  }, [handleImageUpload]);
+      const file = acceptedFiles[0];
+      handleImageUpload(file);
+    },
+    [handleImageUpload]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -62,6 +62,8 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
               <Input label="Harga" placeholder="Masukkan harga produk" type="number" required isRequired value={price?.toString() ?? ""} onChange={(e) => setPrice(Number(e.target.value))} size="sm" />
               <Input label="Stok" placeholder="Masukkan jumlah stok" type="number" required isRequired value={stock?.toString() ?? ""} onChange={(e) => setStock(Number(e.target.value))} size="sm" />
               <Textarea label="Deskripsi Barang" required isRequired value={description} onChange={(e) => setDescription(e.target.value)} size="sm" />
+              {/* Dropdown Status Produk */}
+              
               <div className="mt-2">
                 <p className="text-small font-medium mb-2">
                   Gambar Produk <span className="text-red-500">*</span>

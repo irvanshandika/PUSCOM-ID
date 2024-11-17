@@ -2,7 +2,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { Card, CardBody, CardHeader, Image, Button, Tabs, Tab, Chip, Spinner } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Button, Tabs, Tab, Chip, Spinner } from "@nextui-org/react";
+import Image from "next/image";
 import { ShoppingCart, Heart, Star, Truck, Shield, RotateCcw, ChevronDown, ChevronUp } from "lucide-react";
 import { db } from "@/src/config/FirebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
@@ -113,7 +114,7 @@ export default function ProductDetail() {
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <Image src={product.image} alt={product.name} className="w-full h-auto object-cover rounded-lg" />
+          <Image src={product.image} alt={product.name} className="w-full h-auto object-cover rounded-lg" width={0} height={0} />
         </div>
         <div>
           <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
