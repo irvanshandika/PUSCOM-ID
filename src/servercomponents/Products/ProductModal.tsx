@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Select, SelectItem, Textarea, Select, SelectItem } from "@nextui-org/react";
+import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { useDropzone, FileRejection } from "react-dropzone";
 import { Upload } from "lucide-react";
 import Image from "next/image";
@@ -14,8 +14,13 @@ const productCategories = [
   { label: "Periferal", value: "Peripheral" },
 ];
 
+const productStatuses = [
+  { label: "Baru", value: "Baru" },
+  { label: "Bekas", value: "Bekas" },
+];
+
 export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const { productName, category, price, stock, description, imagePreview, isSubmitting, setProductName, setCategory, setPrice, setStock, setDescription, handleImageUpload, submitProduct } = useProductStore();
+  const { productName, category, status, price, stock, description, imagePreview, isSubmitting, setProductName, setCategory, setStatus, setPrice, setStock, setDescription, handleImageUpload, submitProduct } = useProductStore();
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -62,8 +67,15 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
               <Input label="Harga" placeholder="Masukkan harga produk" type="number" required isRequired value={price?.toString() ?? ""} onChange={(e) => setPrice(Number(e.target.value))} size="sm" />
               <Input label="Stok" placeholder="Masukkan jumlah stok" type="number" required isRequired value={stock?.toString() ?? ""} onChange={(e) => setStock(Number(e.target.value))} size="sm" />
               <Textarea label="Deskripsi Barang" required isRequired value={description} onChange={(e) => setDescription(e.target.value)} size="sm" />
-              {/* Dropdown Status Produk */}
-              
+              {/* Status Produk */}
+              <Select label="Status" placeholder="Pilih status produk" required isRequired value={status} onChange={(e) => setStatus(e.target.value)} size="sm">
+                {productStatuses.map((status) => (
+                  <SelectItem key={status.value} value={status.value}>
+                    {status.label}
+                  </SelectItem>
+                ))}
+              </Select>
+
               <div className="mt-2">
                 <p className="text-small font-medium mb-2">
                   Gambar Produk <span className="text-red-500">*</span>

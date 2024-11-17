@@ -7,6 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 interface ProductState {
   productName: string;
   category: string;
+  status: string;
   price: number | null;
   stock: number | null;
   description: string;
@@ -15,6 +16,7 @@ interface ProductState {
   isSubmitting: boolean;
   setProductName: (name: string) => void;
   setCategory: (category: string) => void;
+  setStatus: (status: string) => void;
   setPrice: (price: number | null) => void;
   setStock: (stock: number | null) => void;
   setDescription: (description: string) => void;
@@ -28,6 +30,7 @@ interface ProductState {
 const useProductStore = create<ProductState>((set, get) => ({
   productName: "",
   category: "",
+  status: "",
   price: null,
   stock: null,
   description: "",
@@ -36,6 +39,7 @@ const useProductStore = create<ProductState>((set, get) => ({
   isSubmitting: false,
   setProductName: (name) => set({ productName: name }),
   setCategory: (category) => set({ category }),
+  setStatus: (status) => set({ status }),
   setPrice: (price) => set({ price }),
   setStock: (stock) => set({ stock }),
   setDescription: (description) => set({ description }),
