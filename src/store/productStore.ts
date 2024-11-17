@@ -49,6 +49,7 @@ const useProductStore = create<ProductState>((set, get) => ({
     set({
       productName: "",
       category: "",
+      status: "",
       price: null,
       stock: null,
       description: "",
@@ -68,9 +69,9 @@ const useProductStore = create<ProductState>((set, get) => ({
     reader.readAsDataURL(file);
   },
   submitProduct: async () => {
-    const { productName, category, price, stock, description, uploadedImage, isSubmitting } = get();
+    const { productName, category, status, price, stock, description, uploadedImage, isSubmitting } = get();
     if (isSubmitting) return;
-    if (!productName || !category || !price || !stock || !description || !uploadedImage) {
+    if (!productName || !category || !price || !status || !stock || !description || !uploadedImage) {
       toast.error("Harap lengkapi semua data!");
       return;
     }
@@ -84,6 +85,7 @@ const useProductStore = create<ProductState>((set, get) => ({
       await addDoc(collection(db, "products"), {
         name: productName,
         category: category,
+        status: status,
         price: price,
         stock: stock,
         description: description,
