@@ -19,8 +19,35 @@ const productStatuses = [
   { label: "Bekas", value: "Bekas" },
 ];
 
+const ecommercePlatforms = [
+  { label: "Shopee", value: "shopee" },
+  { label: "Tokopedia", value: "tokopedia" },
+  { label: "BliBli", value: "blibli" },
+];
+
 export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const { productName, category, status, price, stock, description, imagePreview, isSubmitting, setProductName, setCategory, setStatus, setPrice, setStock, setDescription, handleImageUpload, submitProduct } = useProductStore();
+  const {
+    productName,
+    category,
+    status,
+    price,
+    stock,
+    description,
+    imagePreview,
+    isSubmitting,
+    ecommerceURLs,
+    addEcommerceURL,
+    removeEcommerceURL,
+    updateEcommerceURL,
+    setProductName,
+    setCategory,
+    setStatus,
+    setPrice,
+    setStock,
+    setDescription,
+    handleImageUpload,
+    submitProduct,
+  } = useProductStore();
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -48,6 +75,8 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
     await submitProduct();
     onClose();
   };
+
+  const availablePlatforms = ecommercePlatforms.filter((platform) => !ecommerceURLs.find((url) => url.platform === platform.value));
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onClose} size="2xl" scrollBehavior="inside">
@@ -92,6 +121,35 @@ export default function ProductModal({ isOpen, onClose }: { isOpen: boolean; onC
                     </div>
                   )}
                 </div>
+              </div>
+              {/* E-commerce URLs Section */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <p className="text-small font-medium">E-commerce URLs</p>
+                  <Select placeholder="Tambah URL E-commerce" size="sm" className="max-w-[200px]" isDisabled={availablePlatforms.length === 0} onChange={(e) => addEcommerceURL(e.target.value, "")}>
+                    {availablePlatforms.map((platform) => (
+                      <SelectItem key={platform.value} value={platform.value}>
+                        {platform.label}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                </div>
+
+                {ecommerceURLs.map((item) => (
+                  <div key={item.platform} className="flex items-center gap-2">
+                    <div className="w-[100px]">
+                      <span className="text-small font-medium">{ecommercePlatforms.find((p) => p.value === item.platform)?.label}</span>
+                    </div>
+                    <Input placeholder={`Masukkan URL ${ecommercePlatforms.find((p) => p.value === item.platform)?.label}`} value={item.url} onChange={(e) => updateEcommerceURL(item.platform, e.target.value)} size="sm" className="flex-1" />
+                    <Button isIconOnly color="danger" variant="light" onPress={() => removeEcommerceURL(item.platform)} size="sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 6h18"></path>
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                      </svg>
+                    </Button>
+                  </div>
+                ))}
               </div>
             </ModalBody>
             <ModalFooter>

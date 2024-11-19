@@ -3,6 +3,7 @@ import "./globals.css";
 import { Providers } from "@/src/components/providers";
 import { Toaster } from "react-hot-toast";
 import PrelineScript from "@/src/components/PrelineScript";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: {
@@ -26,7 +27,7 @@ export default function RootLayout({
         <PrelineScript />
         <Toaster position="top-right" reverseOrder={false} />
         <Providers>{children}</Providers>
-        <script async src="https://kit.fontawesome.com/c7e6574aa8.js" crossOrigin="anonymous"></script>
+        <Script async src="https://kit.fontawesome.com/c7e6574aa8.js" crossOrigin="anonymous" />
       </body>
     </html>
   );

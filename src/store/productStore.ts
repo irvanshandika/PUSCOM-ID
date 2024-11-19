@@ -4,6 +4,11 @@ import { db, storage } from "@/src/config/FirebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+interface EcommerceURL {
+  platform: string;
+  url: string;
+}
+
 interface ProductState {
   productName: string;
   category: string;
@@ -14,6 +19,11 @@ interface ProductState {
   uploadedImage: File | null;
   imagePreview: string | null;
   isSubmitting: boolean;
+  ecommerceURLs: EcommerceURL[];
+  setEcommerceURLs: (urls: EcommerceURL[]) => void;
+  addEcommerceURL: (platform: string, url: string) => void;
+  removeEcommerceURL: (platform: string) => void;
+  updateEcommerceURL: (platform: string, url: string) => void;
   setProductName: (name: string) => void;
   setCategory: (category: string) => void;
   setStatus: (status: string) => void;
@@ -37,6 +47,24 @@ const useProductStore = create<ProductState>((set, get) => ({
   uploadedImage: null,
   imagePreview: null,
   isSubmitting: false,
+  ecommerceURLs: [],
+  setEcommerceURLs: (urls) => set({ ecommerceURLs: urls }),
+  addEcommerceURL: (platform, url) => {
+    const current = get().ecommerceURLs;
+    if (!current.find((item) => item.platform === platform)) {
+      set({ ecommerceURLs: [...current, { platform, url }] });
+    }
+  },
+  removeEcommerceURL: (platform) => {
+    const current = get().ecommerceURLs;
+    set({ ecommerceURLs: current.filter((item) => item.platform !== platform) });
+  },
+  updateEcommerceURL: (platform, url) => {
+    const current = get().ecommerceURLs;
+    set({
+      ecommerceURLs: current.map((item) => (item.platform === platform ? { ...item, url } : item)),
+    });
+  },
   setProductName: (name) => set({ productName: name }),
   setCategory: (category) => set({ category }),
   setStatus: (status) => set({ status }),
