@@ -5,7 +5,7 @@ const API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 export const model = genAI.getGenerativeModel({
-  model: "gemini-exp-1114",
+  model: "learnlm-1.5-pro-experimental",
   safetySettings: [
     {
       category: HarmCategory.HARM_CATEGORY_HARASSMENT,
